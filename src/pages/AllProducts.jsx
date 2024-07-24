@@ -39,6 +39,7 @@ function AllProducts() {
 
     const handleCategorySelect = (catName) => {
         setSelectedCategory(catName);
+        // console.log(filteredProducts);
         onClose(); // Close the menu when a category is selected
     };
 
@@ -125,6 +126,7 @@ function AllProducts() {
                                             <Th>Description</Th>
                                             <Th>Price</Th>
                                             <Th>Quantity</Th>
+                                            <Th>Created at</Th>
                                             <Th>
                                                 <Menu isOpen={isOpen} onClose={onClose}>
                                                     <MenuButton
@@ -160,6 +162,13 @@ function AllProducts() {
                                                     </HStack>
                                                 </Td>
                                                 <Td>{product.quantity || '0'} units</Td>
+                                                <Td>
+                                                    {new Date(product.$createdAt || 'unknown').toLocaleDateString('en-GB', {
+                                                        day: 'numeric',
+                                                        month: 'short',
+                                                        year: 'numeric'
+                                                    })}
+                                                </Td>
                                                 <Td>
                                                     <HStack spacing={1}>
                                                         <Icon as={MdCategory} />

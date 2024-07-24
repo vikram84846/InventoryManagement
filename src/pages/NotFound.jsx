@@ -30,7 +30,7 @@ function NotFound() {
         <Icon as={MdErrorOutline} boxSize={16} color="red.500" />
         <Heading as="h1" size="xl">404 - Not Found</Heading>
         <Text fontSize="lg" textAlign={'center'}>Sorry, the page you are looking for does not exist.</Text>
-        <Link to="/"  _hover={{ textDecoration: 'none' }} >
+        <Link to="/" _hover={{ textDecoration: 'none' }} replace:true >
           Go back to the
           <Text as="span" color="blue.500"> home page</Text>
         </Link>

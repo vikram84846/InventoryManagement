@@ -64,11 +64,6 @@ export const ProductProvider = ({ children }) => {
     fetchWareHouse();
   }, [selectedRoomId]);
 
-  // useEffect(() => {
-  //   // This effect will run whenever `products` state changes
-  //   console.log('Updated Products:', products);
-  // }, [products]); // Dependency array ensures this effect runs when `products` changes
-
   return (
     <ProductContext.Provider value={{
       products,

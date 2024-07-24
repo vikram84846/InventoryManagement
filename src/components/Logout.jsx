@@ -12,13 +12,11 @@ function Logout() {
 
     const handleLogout = async () => {
         try {
-            const response = await logout();
-            // console.log('logout successfully');
-            localStorage.removeItem('userData');
-            setUser('null')
-            navigate('/')
-            // Display success toast notification
-
+            await logout();
+            document.cookie = 'session=; path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            console.log('Session cookie cleared');
+            setUser(null); // Ensure user context is cleared if used
+            navigate('/', { replace: true });
             toast({
                 title: 'Logout successful',
                 status: 'success',
@@ -26,11 +24,7 @@ function Logout() {
                 isClosable: true,
                 position: 'top-right'
             });
-
         } catch (error) {
-            console.log(error);
-
-            // Display error toast notification
             toast({
                 title: 'Logout failed',
                 description: error.message,
@@ -42,6 +36,7 @@ function Logout() {
         }
     };
 
+    
     return (
         <>
             <Button

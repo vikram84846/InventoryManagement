@@ -1,12 +1,26 @@
 import { Center, Flex, Heading, Box, Text, Avatar, VStack } from '@chakra-ui/react';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import Loading from '../components/Loading';
-// import Sidebar from '../components/Sidebar';
+import getSession from '../utils';
 const Sidebar = React.lazy(() => import('../components/Sidebar'));
+
 function Profile() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const session = getSession();
+        if (session) {
+            setUser(session);
+        }
+    }, []);
+
+    if (!user) {
+        return <Loading />;
+    }
+
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
                 <Sidebar />
                 <Flex ml="250px" justify="center" align="center" minH="100vh" bg="gray.100" p={4}>
                     <Box
@@ -19,15 +33,18 @@ function Profile() {
                         textAlign="center"
                     >
                         <VStack spacing={4}>
-                            <Avatar size="2xl" name="Your Name" src="https://bit.ly/broken-link" />
-                            <Heading size="lg" color="purple.700">Your Name</Heading>
-                            <Text fontSize="md" color="gray.600">your.email@example.com</Text>
-                            <Text fontSize="md" color="gray.600">Bio: A brief bio about yourself.</Text>
-                            <Text fontSize="md" color="gray.600">Location: Your city, Country</Text>
+                            <Avatar size="2xl" name={user.name || 'User'} src="https://bit.ly/broken-link" />
+                            <Heading size="lg" color="purple.700">{user.name || 'Your Name'}</Heading>
+                            <Text fontSize="md" color="gray.600">{user.email || 'your.email@example.com'}</Text>
+                            <Text fontSize="md" color="gray.600">
+                                Bio: {user.bio || 'I’m not arguing, I’m just explaining why I’m right.'}
+                            </Text>
+                            <Text fontSize="md" color="gray.600">
+                                Location: {user.location || 'Planet Earth, Not in the mood for a vacation.'}
+                            </Text>
                         </VStack>
                     </Box>
                 </Flex>
-                <Loading/>
             </Suspense>
         </>
     );

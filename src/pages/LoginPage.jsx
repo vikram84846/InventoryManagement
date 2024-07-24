@@ -29,9 +29,9 @@ function LoginPage() {
         setLoading(true);
         try {
             const response = await loginAccount(email, password);
-            // console.log(response)
-            await saveUserData(response);
-            navigate('/home');
+            document.cookie = `session=${JSON.stringify(response)}; path=/; max-age=${2 * 24 * 60 * 60}`;
+            console.log('Session cookie set');
+            navigate('/home', { replace: true });
             toast({
                 title: 'Login successful',
                 status: 'success',
@@ -53,15 +53,6 @@ function LoginPage() {
         }
     };
 
-    const saveUserData = async (response) => {
-        const userData = {
-            $id: response.$id,
-            email: response.email,
-            name: response.name,
-        }
-        localStorage.setItem('user', JSON.stringify(userData));
-        setUser(userData)
-    };
 
 
     return (
@@ -79,7 +70,7 @@ function LoginPage() {
                 borderRadius={8}
                 boxShadow="lg"
                 bg="rgba(255, 255, 255, 0.08)"
-            
+
             >
                 <Stack spacing={4}>
                     <Heading textAlign="center" size="xl">

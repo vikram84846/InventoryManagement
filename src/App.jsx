@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import Header from './components/Header.jsx';
+import React, { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.jsx';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AllProducts from './pages/AllProducts.jsx';
 import FullHistory from './pages/FullHistory.jsx';
 import Profile from './pages/Profile.jsx';
@@ -10,28 +8,75 @@ import SearchResult from './pages/SearchResult.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import Loading from './components/Loading.jsx';
 import NotFound from './pages/NotFound.jsx';
-import { ProductContext } from './context/ProductContext.jsx';
+import getSession from './utils.js';
+import PrivateRoute from './components/PrivateRoute.jsx';
 
+function App() {
+    const [state, setState] = useState({ session: null, isLoaded: false });
 
+    useEffect(() => {
+        const session = getSession();
+        setState({ session, isLoaded: true });
+    }, []);
 
-const App = () => {
+    if (!state.isLoaded) {
+        return <Loading />;
+    }
 
-      return (
-        <ChakraProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route exact path="/" element={<LoginPage />} />
-              <Route exact path="/home" element={<Home />} /> 
-              <Route exact path="/products" element={<AllProducts />} />
-              <Route exact path="/history" element={<FullHistory />} />
-              <Route exact path="/profile" element={<Profile />} />
-              <Route exact path="/search" element={<SearchResult />} />
-              <Route exact path="/loading" element={<Loading />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </ChakraProvider>
-      );
-};
+    return (
+        <Routes>
+            <Route
+                path="/home"
+                element={
+                    <PrivateRoute>
+                        <Home />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/"
+                element={
+                    <PrivateRoute>
+                        <Home />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/products"
+                element={
+                    <PrivateRoute>
+                        <AllProducts />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/history"
+                element={
+                    <PrivateRoute>
+                        <FullHistory />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/profile"
+                element={
+                    <PrivateRoute>
+                        <Profile />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/search"
+                element={
+                    <PrivateRoute>
+                        <SearchResult />
+                    </PrivateRoute>
+                }
+            />
+            <Route path="/loading" element={<Loading />} />
+            <Route path="*" element={<NotFound />} />
+        </Routes>
+    );
+}
 
 export default App;

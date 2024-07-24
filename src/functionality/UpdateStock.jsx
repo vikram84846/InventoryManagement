@@ -55,7 +55,7 @@ function UpdateStock() {
     const handleProductSelect = (productId) => {
         const product = products.find((p) => p.$id === productId);
         setSelectedProduct(productId);
-        setSearchTerm(product.title); // Set the searchTerm to the selected product's title
+        setSearchTerm(product.title); 
         setQuantityInput('');
         setSuggestions([]);
     };

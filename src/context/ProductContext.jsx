@@ -10,7 +10,6 @@ export const ProductProvider = ({ children }) => {
   const [wareHouse, setWarehouse] = useState([]);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [user, setUser] = useState(null)
-
   
 
   const fetchProducts = async () => {

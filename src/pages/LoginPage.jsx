@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Box,
     Button,
@@ -18,17 +18,16 @@ import { ProductContext } from '../context/ProductContext';
 function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false); // Loading state
+    const [loading, setLoading] = useState(false);
     const { setUser } = useContext(ProductContext);
-
     const toast = useToast();
     const navigate = useNavigate();
-
 
     const handleLogin = async () => {
         setLoading(true);
         try {
             const response = await loginAccount(email, password);
+            setUser(response);
             document.cookie = `session=${JSON.stringify(response)}; path=/; max-age=${2 * 24 * 60 * 60}`;
             console.log('Session cookie set');
             navigate('/home', { replace: true });
@@ -53,8 +52,6 @@ function LoginPage() {
         }
     };
 
-
-
     return (
         <Box
             minH="100vh"
@@ -65,12 +62,11 @@ function LoginPage() {
         >
             <Box
                 p={8}
-                width={{ base: '90%', sm: '80%', md: '50%', lg: '40%' }} // Adjusted width responsively
+                width={{ base: '90%', sm: '80%', md: '50%', lg: '40%' }}
                 borderWidth={1}
                 borderRadius={8}
                 boxShadow="lg"
                 bg="rgba(255, 255, 255, 0.08)"
-
             >
                 <Stack spacing={4}>
                     <Heading textAlign="center" size="xl">
@@ -100,7 +96,7 @@ function LoginPage() {
                         variant="solid"
                         leftIcon={<MdLogin />}
                         onClick={handleLogin}
-                        isLoading={loading} // Show loading spinner
+                        isLoading={loading}
                     >
                         Sign In
                     </Button>

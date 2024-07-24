@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import AllProducts from './pages/AllProducts.jsx';
 import FullHistory from './pages/FullHistory.jsx';
@@ -8,18 +8,32 @@ import SearchResult from './pages/SearchResult.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import Loading from './components/Loading.jsx';
 import NotFound from './pages/NotFound.jsx';
-import getSession from './utils.js';
+import { ProductContext } from './context/ProductContext.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
+import getSession from './utils.js';
 
 function App() {
-    const [state, setState] = useState({ session: null, isLoaded: false });
+    const [isLoaded, setIsLoaded] = useState(false);
+    const { user, setUser } = useContext(ProductContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        // Check if session cookie exists and set user context accordingly
         const session = getSession();
-        setState({ session, isLoaded: true });
-    }, []);
+        if (session) {
+            setUser(session);
+        }
+        setIsLoaded(true);
+    }, [setUser]);
 
-    if (!state.isLoaded) {
+    useEffect(() => {
+        // Redirect to login if no user context is found and user is trying to access protected routes
+        if (isLoaded && !user && window.location.pathname !== '/login') {
+            navigate('/login');
+        }
+    }, [isLoaded, user, navigate]);
+
+    if (!isLoaded) {
         return <Loading />;
     }
 
@@ -29,7 +43,7 @@ function App() {
             <Route
                 path="/home"
                 element={
-                    <PrivateRoute session={state.session}>
+                    <PrivateRoute session={user}>
                         <Home />
                     </PrivateRoute>
                 }
@@ -37,7 +51,7 @@ function App() {
             <Route
                 path="/"
                 element={
-                    <PrivateRoute session={state.session}>
+                    <PrivateRoute session={user}>
                         <Home />
                     </PrivateRoute>
                 }
@@ -46,7 +60,7 @@ function App() {
             <Route
                 path="/products"
                 element={
-                    <PrivateRoute session={state.session}>
+                    <PrivateRoute session={user}>
                         <AllProducts />
                     </PrivateRoute>
                 }
@@ -54,7 +68,7 @@ function App() {
             <Route
                 path="/history"
                 element={
-                    <PrivateRoute session={state.session}>
+                    <PrivateRoute session={user}>
                         <FullHistory />
                     </PrivateRoute>
                 }
@@ -62,7 +76,7 @@ function App() {
             <Route
                 path="/profile"
                 element={
-                    <PrivateRoute session={state.session}>
+                    <PrivateRoute session={user}>
                         <Profile />
                     </PrivateRoute>
                 }
@@ -70,7 +84,7 @@ function App() {
             <Route
                 path="/search"
                 element={
-                    <PrivateRoute session={state.session}>
+                    <PrivateRoute session={user}>
                         <SearchResult />
                     </PrivateRoute>
                 }

@@ -36,14 +36,16 @@ function Logout() {
         }
     };
 
-    
+
     return (
         <>
             <Button
                 leftIcon={<MdLogout />}
-                colorScheme="teal"
-                variant="solid"
-                w={'100%'}
+                variant={'ghost'}
+                color={'white'}
+                fontWeight={'bold'}
+                fontSize={'large'}
+                _hover={{ bg: 'purple.700' }}
                 onClick={handleLogout}
                 mt={3}
             >

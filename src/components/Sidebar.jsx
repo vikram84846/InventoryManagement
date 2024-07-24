@@ -144,6 +144,19 @@ function Sidebar() {
                             </Link>
                         </VStack>
                         <VStack align="center" spacing={4}>
+                            <Link to={'/profile'}>
+                                <Button
+                                    p={5}
+                                    leftIcon={<FaUserAlt />}
+                                    variant={'ghost'}
+                                    color={'white'}
+                                    fontWeight={'bold'}
+                                    fontSize={'large'}
+                                    _hover={{ bg: 'purple.700' }}
+                                >
+                                    Profile
+                                </Button>
+                            </Link>
                             <Logout />
                         </VStack>
                     </VStack>

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import {
     Box,
     Button,
+    Center,
     FormControl,
     FormLabel,
     Heading,
@@ -101,7 +102,9 @@ function LoginPage() {
                         Sign In
                     </Button>
                 </Stack>
-                <Logout />
+                <Center w={'100%'}>
+                    <Logout />
+                </Center>
             </Box>
         </Box>
     );

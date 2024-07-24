@@ -25,10 +25,11 @@ function App() {
 
     return (
         <Routes>
+            <Route path="/loading" element={<Loading />} />
             <Route
                 path="/home"
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute session={state.session}>
                         <Home />
                     </PrivateRoute>
                 }
@@ -36,15 +37,16 @@ function App() {
             <Route
                 path="/"
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute session={state.session}>
                         <Home />
                     </PrivateRoute>
                 }
             />
+            <Route path="/login" element={<LoginPage />} />
             <Route
                 path="/products"
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute session={state.session}>
                         <AllProducts />
                     </PrivateRoute>
                 }
@@ -52,7 +54,7 @@ function App() {
             <Route
                 path="/history"
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute session={state.session}>
                         <FullHistory />
                     </PrivateRoute>
                 }
@@ -60,7 +62,7 @@ function App() {
             <Route
                 path="/profile"
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute session={state.session}>
                         <Profile />
                     </PrivateRoute>
                 }
@@ -68,12 +70,11 @@ function App() {
             <Route
                 path="/search"
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute session={state.session}>
                         <SearchResult />
                     </PrivateRoute>
                 }
             />
-            <Route path="/loading" element={<Loading />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

@@ -19,7 +19,7 @@ function SearchResult() {
 
     if (!query) {
         return (
-            <Box ml={'250px'} p={4}>
+            <Box ml={{ base: 0, md: '250px' }} p={4}>
                 <Text>No product selected.</Text>
             </Box>
         );
@@ -28,18 +28,18 @@ function SearchResult() {
     return (
         <>
             <Sidebar />
-            <Box ml={'250px'} p={4}>
-                <Box w="40%" mx="auto">
+            <Box ml={{ base: 0, md: '250px' }} p={4}>
+                <Box w={{ base: "90%", md: "40%" }} mx="auto">
                     <SearchBar />
                 </Box>
-                <HStack justifyContent="center" alignItems="baseline" mt={4} mb={4} spacing={2}>
+                <HStack justifyContent="center" alignItems="baseline" mt={4} mb={4} spacing={2} flexWrap="wrap">
                     <Text fontSize='2xl' color="gray.700" fontWeight="semibold">Search Results for : </Text>
                     <Heading size='2xl' color="purple.700">{query.title || 'Unknown Title'}</Heading>
                 </HStack>
 
                 <VStack spacing={6} p={4} align="stretch">
                     <HStack justify={'space-evenly'} wrap="wrap" spacing={4}>
-                        <Box w={{ base: "100%", md: "18%" }}>
+                        <Box w={{ base: "100%", sm: "48%", md: "18%" }}>
                             <Card borderWidth="1px" borderColor={'purple.500'} borderRadius="lg" overflow="hidden" boxShadow="lg">
                                 <CardHeader bg="purple.200" p={4}>
                                     <Heading size='md'>Product Name</Heading>
@@ -49,7 +49,7 @@ function SearchResult() {
                                 </CardBody>
                             </Card>
                         </Box>
-                        <Box w={{ base: "100%", md: "18%" }}>
+                        <Box w={{ base: "100%", sm: "48%", md: "18%" }}>
                             <Card borderWidth="1px" borderColor={'purple.500'} borderRadius="lg" overflow="hidden" boxShadow="lg">
                                 <CardHeader bg="purple.200" p={4}>
                                     <Heading size='md'>Category</Heading>
@@ -59,7 +59,7 @@ function SearchResult() {
                                 </CardBody>
                             </Card>
                         </Box>
-                        <Box w={{ base: "100%", md: "18%" }}>
+                        <Box w={{ base: "100%", sm: "48%", md: "18%" }}>
                             <Card borderWidth="1px" borderColor={'purple.500'} borderRadius="lg" overflow="hidden" boxShadow="lg">
                                 <CardHeader bg="purple.200" p={4}>
                                     <Heading size='md'>Stock</Heading>
@@ -71,7 +71,7 @@ function SearchResult() {
                                 </CardBody>
                             </Card>
                         </Box>
-                        <Box w={{ base: "100%", md: "18%" }}>
+                        <Box w={{ base: "100%", sm: "48%", md: "18%" }}>
                             <Card borderWidth="1px" borderColor={'purple.500'} borderRadius="lg" overflow="hidden" boxShadow="lg">
                                 <CardHeader bg="purple.200" p={4}>
                                     <Heading size='md'>Price</Heading>
@@ -81,7 +81,7 @@ function SearchResult() {
                                 </CardBody>
                             </Card>
                         </Box>
-                        <Box w={{ base: "100%", md: "18%" }}>
+                        <Box w={{ base: "100%", sm: "48%", md: "18%" }}>
                             <Card borderWidth="1px" borderColor={'purple.500'} borderRadius="lg" overflow="hidden" boxShadow="lg">
                                 <CardHeader bg="purple.200" p={4}>
                                     <Heading size='md'>Created At</Heading>

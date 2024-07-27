@@ -11,6 +11,7 @@ import {
     ModalCloseButton,
     Button,
     useDisclosure,
+    useBreakpointValue,
     useToast
 } from '@chakra-ui/react';
 import { MdDelete } from 'react-icons/md';
@@ -49,7 +50,7 @@ function DeleteProduct({ product }) {
             });
         }
     };
-
+    const modalSize = useBreakpointValue({ base: 'md', md: 'md' });
     return (
         <>
             <IconButton
@@ -62,7 +63,7 @@ function DeleteProduct({ product }) {
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent mx={{ base: '4', md: 'auto' }} my={{ base: '10', md: 'auto' }}>
                     <ModalHeader>Delete Product</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

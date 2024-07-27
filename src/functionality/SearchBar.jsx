@@ -30,6 +30,18 @@ function SearchBar() {
 
   const handleSearch = async () => {
     try {
+      if (productName === '') {
+        toast({
+          title: 'Error',
+          description: 'Please enter a product name',
+          position: 'top-right',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+          variant: 'left-accent'
+        })
+        return
+      }
       const productselected = suggestions.find((product) => product.title === productName)
       if (productselected) {
         const idOfProduct = (productselected.$id).toString()

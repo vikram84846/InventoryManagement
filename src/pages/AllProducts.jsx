@@ -1,4 +1,4 @@
-import React, { Suspense, useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useState } from 'react';
 import {
     Table,
     Thead,
@@ -21,9 +21,11 @@ import {
     MenuItem,
     Button,
     useBreakpointValue,
-    useDisclosure
+    useDisclosure,
+    IconButton
 } from '@chakra-ui/react';
 import { MdAttachMoney, MdCategory } from 'react-icons/md';
+import { HiDotsVertical } from 'react-icons/hi';
 import { ProductContext } from '../context/ProductContext';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import ShowRooms from '../components/ShowRooms';
@@ -33,14 +35,14 @@ import DeleteProduct from '../functionality/productUpdates/DeleteProduct';
 const Sidebar = React.lazy(() => import('../components/Sidebar'));
 
 function AllProducts() {
-    const { products = [], category = [] } = useContext(ProductContext); // Provide default empty arrays
+    const { products = [], category = [] } = useContext(ProductContext);
     const [selectedCategory, setSelectedCategory] = useState('');
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: openCategory, onOpen: categoryOpen, onClose: closeCategory } = useDisclosure();
+    const { isOpen: openProductModal, onOpen: productModalOpen, onClose: closeProductModal } = useDisclosure();
 
     const handleCategorySelect = (catName) => {
         setSelectedCategory(catName);
-        // console.log(filteredProducts);
-        onClose(); // Close the menu when a category is selected
+        closeCategory();
     };
 
     const filteredProducts = selectedCategory
@@ -54,7 +56,7 @@ function AllProducts() {
             <Suspense fallback={<Loading />}>
                 <Sidebar />
                 <Flex
-                    ml={{ base: 0, md: "250px" }} // Adjust margin-left for mobile
+                    ml={{ base: 0, md: "250px" }}
                     flexDirection="column"
                     p={4}
                     bg="gray.100"
@@ -63,20 +65,20 @@ function AllProducts() {
                         <Heading size={isMobileView ? "md" : "lg"}>All Products</Heading>
                     </Center>
                     <HStack
-                        flexDirection={{ base: "column", md: "row" }} // Stack vertically on mobile
+                        flexDirection={{ base: "column", md: "row" }}
                         justify="space-between"
                         mb={6}
                         w="full"
                     >
                         <HStack spacing={4} mb={isMobileView ? 4 : 0} w="full" justify={isMobileView ? "center" : "flex-end"}>
                             {isMobileView && (
-                                <Menu isOpen={isOpen} onClose={onClose}>
+                                <Menu isOpen={openCategory} onClose={closeCategory}>
                                     <MenuButton
                                         as={Button}
                                         rightIcon={<ChevronDownIcon />}
                                         variant="ghost"
                                         size="sm"
-                                        onClick={onOpen}
+                                        onClick={categoryOpen}
                                     >
                                         {selectedCategory || 'CATEGORY'}
                                     </MenuButton>
@@ -99,8 +101,26 @@ function AllProducts() {
                             {filteredProducts.length > 0 ? filteredProducts.map((product, index) => (
                                 <Box key={index} bg="white" p={4} borderRadius="md" boxShadow="md" w="full">
                                     <VStack align="start" spacing={2}>
-                                        <Text fontWeight="bold">{product.title || 'Unknown Title'}</Text>
-                                        <Text>{product.description || 'No description available'}</Text>
+                                        <HStack w={'full'} justify={'space-between'}>
+                                            <Text fontWeight="bold">{product.title || 'Unknown Title'}</Text>
+                                            <Menu>
+                                                <MenuButton
+                                                    as={IconButton}
+                                                    icon={<HiDotsVertical />}
+                                                    variant="ghost"
+                                                    aria-label="Options"
+                                                />
+                                                <MenuList minWidth="120px" maxWidth="120px" >
+                                                    <MenuItem>
+                                                        Edit<EditProduct product={product} />
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        Delete<DeleteProduct product={product} />
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </Menu>
+                                        </HStack>
+                                        <Text>{product.discription || 'No description available'}</Text>
                                         <HStack spacing={1}>
                                             <Icon as={MdAttachMoney} />
                                             <Text>{product.price || 'N/A'}</Text>
@@ -128,13 +148,13 @@ function AllProducts() {
                                             <Th>Quantity</Th>
                                             <Th>Created at</Th>
                                             <Th>
-                                                <Menu isOpen={isOpen} onClose={onClose}>
+                                                <Menu isOpen={openCategory} onClose={closeCategory}>
                                                     <MenuButton
                                                         as={Button}
                                                         rightIcon={<ChevronDownIcon />}
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={onOpen}
+                                                        onClick={categoryOpen}
                                                     >
                                                         {selectedCategory || 'CATEGORY'}
                                                     </MenuButton>
@@ -176,10 +196,8 @@ function AllProducts() {
                                                     </HStack>
                                                 </Td>
                                                 <Td>
-                                                    <HStack spacing={1}>
-                                                        <EditProduct product={product} />
-                                                        <DeleteProduct product={product} />
-                                                    </HStack>
+                                                    <EditProduct product={product} />
+                                                    <DeleteProduct product={product} />
                                                 </Td>
                                             </Tr>
                                         )) : (

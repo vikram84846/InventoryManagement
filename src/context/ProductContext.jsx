@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { listCategory, listProducts, showHistory, getLocation } from '../appwrite/Services';
+import { db } from '../appwrite/appwriteService';
+import { Query } from "appwrite";
 
 export const ProductContext = createContext();
 
@@ -9,17 +10,16 @@ export const ProductProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
   const [wareHouse, setWarehouse] = useState([]);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const [user, setUser] = useState(null)
-  
+  const [user, setUser] = useState(null);
 
   const fetchProducts = async () => {
     try {
-      const data = await listProducts();
+      const data = await db.products.list([Query.orderDesc('$createdAt')]); // Adjust sorting if needed
       const filteredProducts = data.documents.filter(product =>
         product.location.some(loc => loc.$id === selectedRoomId?.$id)
       );
       setProducts(filteredProducts);
-      // console.log('Filtered Products:', filteredProducts);
+      console.log('Filtered Products:', filteredProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -27,7 +27,7 @@ export const ProductProvider = ({ children }) => {
 
   const fetchCategories = async () => {
     try {
-      const data = await listCategory();
+      const data = await db.categories.list([Query.orderAsc('$createdAt')]); // Ascending order
       setCategory(data.documents);
       // console.log('Categories:', data.documents);
     } catch (error) {
@@ -37,9 +37,8 @@ export const ProductProvider = ({ children }) => {
 
   const fetchHistory = async () => {
     try {
-      const data = await showHistory();
+      const data = await db.history.list([Query.orderDesc('$createdAt')]); // Descending order
       setHistory(data.documents);
-
       // console.log('History:', data.documents);
     } catch (error) {
       console.error('Error fetching history:', error);
@@ -48,7 +47,7 @@ export const ProductProvider = ({ children }) => {
 
   const fetchWareHouse = async () => {
     try {
-      const data = await getLocation();
+      const data = await db.locations.list([Query.orderAsc('$createdAt')]); // Ascending order
       setWarehouse(data.documents); // Assuming `data.documents` contains the array of locations
       // console.log('Location:', data.documents);
     } catch (error) {

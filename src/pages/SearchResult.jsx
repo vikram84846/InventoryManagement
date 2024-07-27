@@ -6,12 +6,13 @@ import SearchBar from '../functionality/SearchBar';
 import { ProductContext } from '../context/ProductContext';
 
 function SearchResult() {
-    const { history, fetchHistory } = useContext(ProductContext);
+    const { history, fetchHistory, products } = useContext(ProductContext);
     const location = useLocation();
     const { query } = location.state || {};
 
     // Ensure `query` and `query.$id` are defined before filtering `history`
     const productTransactions = query ? history.filter(transaction => transaction.products && transaction.products.$id === query.$id) : [];
+    const currentProductDetail = products.find(product => product.$id === query.$id) || {};
 
     useEffect(() => {
         fetchHistory();
@@ -45,7 +46,7 @@ function SearchResult() {
                                     <Heading size='md'>Product Name</Heading>
                                 </CardHeader>
                                 <CardBody p={4}>
-                                    <Text fontSize='lg'>{query.title || 'N/A'}</Text>
+                                    <Text fontSize='lg'>{currentProductDetail.title || query.title || 'N/A'}</Text>
                                 </CardBody>
                             </Card>
                         </Box>
@@ -55,7 +56,7 @@ function SearchResult() {
                                     <Heading size='md'>Category</Heading>
                                 </CardHeader>
                                 <CardBody p={4}>
-                                    <Text fontSize='lg'>{query.category?.name || 'N/A'}</Text>
+                                    <Text fontSize='lg'>{currentProductDetail.category?.name || query.category?.name || 'N/A'}</Text>
                                 </CardBody>
                             </Card>
                         </Box>
@@ -65,8 +66,8 @@ function SearchResult() {
                                     <Heading size='md'>Stock</Heading>
                                 </CardHeader>
                                 <CardBody p={4}>
-                                    <Text fontSize='lg' color={query.quantity < 100 ? 'red.500' : 'green'}>
-                                        {productTransactions.length > 0 ? productTransactions[0].products.quantity : 'N/A'}
+                                    <Text fontSize='lg' color={(productTransactions.length > 0 && productTransactions[0].products.quantity < 100) ? 'red.500' : 'green'}>
+                                        {productTransactions.length > 0 ? productTransactions[0].products.quantity : (currentProductDetail.quantity || 'N/A')}
                                     </Text>
                                 </CardBody>
                             </Card>
@@ -77,7 +78,7 @@ function SearchResult() {
                                     <Heading size='md'>Price</Heading>
                                 </CardHeader>
                                 <CardBody p={4}>
-                                    <Text fontSize='lg'>${query.price || 'N/A'}</Text>
+                                    <Text fontSize='lg'>${query.price || currentProductDetail.price || 'N/A'}</Text>
                                 </CardBody>
                             </Card>
                         </Box>
@@ -88,9 +89,11 @@ function SearchResult() {
                                 </CardHeader>
                                 <CardBody p={4}>
                                     <Text fontSize='lg'>
-                                        {query.$createdAt 
-                                            ? `${new Date(query.$createdAt).toLocaleDateString()} At ${new Date(query.$createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}` 
-                                            : 'N/A'
+                                        {query.$createdAt
+                                            ? `${new Date(query.$createdAt).toLocaleDateString()} At ${new Date(query.$createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}`
+                                            : (currentProductDetail.$createdAt
+                                                ? `${new Date(currentProductDetail.$createdAt).toLocaleDateString()} At ${new Date(currentProductDetail.$createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}`
+                                                : 'N/A')
                                         }
                                     </Text>
                                 </CardBody>

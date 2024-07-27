@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound.jsx';
 import { ProductContext } from './context/ProductContext.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import getSession from './utils.js';
+import SignUpPage from './pages/SignUpPage.jsx';
 
 function App() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -57,6 +58,7 @@ function App() {
                 }
             />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/Signup" element={<SignUpPage />} />
             <Route
                 path="/products"
                 element={

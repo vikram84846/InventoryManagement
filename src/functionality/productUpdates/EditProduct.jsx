@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { updateProduct } from '../../appwrite/Services';
 import {
     Modal,
@@ -14,15 +14,17 @@ import {
     FormControl,
     FormLabel,
     Input,
-    FormHelperText,
+    Select,
     useToast,
-    Select
+    useBreakpointValue,
+    Box,
+    VStack,
 } from '@chakra-ui/react';
 import { MdEdit } from 'react-icons/md';
-import { ProductContext  } from '../../context/ProductContext';
+import { ProductContext } from '../../context/ProductContext';
 
 function EditProduct({ product }) {
-    const {category,fetchProducts } = useContext(ProductContext)
+    const { category, fetchProducts } = useContext(ProductContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [productName, setProductName] = useState(product?.title);
     const [productDescription, setProductDescription] = useState(product?.discription);
@@ -30,27 +32,24 @@ function EditProduct({ product }) {
     const [productPrice, setProductPrice] = useState(product?.price);
     const toast = useToast();
 
-    const productdetail = {
+    const productDetail = {
         title: productName,
-        discription: productDescription, // Corrected spelling of 'description'
+        description: productDescription,
         category: productCategory,
         price: parseFloat(productPrice),
     };
 
-
     const handleSubmit = async () => {
         try {
-            await updateProduct(product?.$id, productdetail);
-            console.log(product);
-            fetchProducts()
+            await updateProduct(product?.$id, productDetail);
+            fetchProducts();
             toast({
-                title: productName,
+                title: 'Success',
                 description: 'Product details have been updated successfully.',
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
                 position: 'top-right',
-                variant: 'left-accent'
             });
             onClose();
         } catch (error) {
@@ -61,10 +60,12 @@ function EditProduct({ product }) {
                 duration: 3000,
                 isClosable: true,
                 position: 'top-right',
-                variant: 'left-accent'
             });
         }
     };
+
+    // Responsive size for modal
+    const modalSize = useBreakpointValue({ base: 'md', md: 'md' });
 
     return (
         <>
@@ -76,9 +77,9 @@ function EditProduct({ product }) {
                 variant={'ghost'}
             />
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} size={modalSize}>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent mx={{ base: '4', md: 'auto' }} my={{ base: '10', md: 'auto' }}>
                     <ModalHeader>Edit Product</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
@@ -90,6 +91,22 @@ function EditProduct({ product }) {
                                 placeholder="Enter product name"
                                 onChange={e => setProductName(e.target.value)}
                             />
+                            <FormLabel mt={4}>Category</FormLabel>
+                            <Select
+                                placeholder='Select Category'
+                                isRequired
+                                value={productCategory}
+                                onChange={(e) => setProductCategory(e.target.value)}
+                                bg='white'
+                                _focus={{ borderColor: 'blue.500' }}
+                                size='md' // Control size if needed
+                            >
+                                {category.map((cat) => (
+                                    <option key={cat.$id} value={cat.$id}>
+                                        {cat.name}
+                                    </option>
+                                ))}
+                            </Select>
                             <FormLabel mt={4}>Description</FormLabel>
                             <Input
                                 name="description"
@@ -105,19 +122,6 @@ function EditProduct({ product }) {
                                 onChange={e => setProductPrice(e.target.value)}
                                 placeholder="Enter product price"
                             />
-
-                            <FormLabel>Category</FormLabel>
-                            <Select
-                                placeholder='Select Category'
-                                isRequired 
-                                value={productCategory}
-                                onChange={(e) => setProductCategory(e.target.value)}
-                            >
-                                {category.map((cat) => (
-                                    <option key={cat.$id} value={cat.$id}>{cat.name}</option>
-                                ))}
-                            </Select>
-
                         </FormControl>
                     </ModalBody>
 

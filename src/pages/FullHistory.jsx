@@ -24,6 +24,9 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { ProductContext } from '../context/ProductContext';
 import Loading from '../components/Loading';
+import { Link } from 'react-router-dom';
+import SearchBar from '../functionality/SearchBar';
+
 const Sidebar = React.lazy(() => import('../components/Sidebar'));
 
 function FullHistory() {
@@ -47,6 +50,7 @@ function FullHistory() {
 
     const isMobileView = useBreakpointValue({ base: true, md: false });
 
+
     return (
         <>
             <Suspense fallback={<Loading />}>
@@ -58,6 +62,11 @@ function FullHistory() {
                     bg="gray.100"
                     minH="100vh"
                 >
+                    <Center w="full" mb={4}>
+                        <Box w={{ base: "90%", md: "60%" }}>
+                            <SearchBar />
+                        </Box>
+                    </Center>
                     <HStack
                         flexDirection={{ base: "column", md: "row" }} // Stack vertically on mobile
                         justify="space-between"
@@ -114,26 +123,33 @@ function FullHistory() {
 
                     {isMobileView ? (
                         <VStack spacing={4} w="full">
-                            {filteredHistory.map((entry, index) => (
+                            {filteredHistory.length > 0 ? filteredHistory.map((entry, index) => (
                                 <Box key={index} bg="white" p={4} borderRadius="md" boxShadow="md" w="full">
-                                    <VStack align="start" spacing={2}>
-                                        <Text fontWeight="bold">Product Name: {entry.products && entry.products.title ? entry.products.title : 'unknown'}</Text>
-                                        <Text>Category: {entry.products && entry.products.category && entry.products.category.name ? entry.products.category.name : "unknown"}</Text>
-                                        <Text color={entry.quantity < 0 ? 'red.500' : 'green'}>Quantity: {entry.quantity}</Text>
-                                        <Text>Note: {entry.note}</Text>
-                                        <Text>Time: {new Date(entry.$createdAt).toLocaleTimeString([], {
-                                            hour: 'numeric',
-                                            minute: '2-digit',
-                                            hour12: true,
-                                        })}</Text>
-                                        <Text>Date: {new Date(entry.$createdAt).toLocaleDateString('en-GB', {
-                                            day: 'numeric',
-                                            month: 'short',
-                                            year: 'numeric'
-                                        })}</Text>
-                                    </VStack>
+                                    <Link to={`/products/${entry.products?.$id}`}>
+                                        <VStack align="start" spacing={2}>
+                                            <Text fontWeight="bold">Product Name: {entry.products?.title || 'unknown'}</Text>
+                                            {/* <Text fontWeight="bold">Product ID: {entry.products?.$id || 'unknown'}</Text> */}
+                                            <Text>Category: {entry.products?.category?.name || "unknown"}</Text>
+                                            <Text color={entry.quantity < 0 ? 'red.500' : 'green'}>Quantity: {entry.quantity}</Text>
+                                            <Text>Note: {entry.note}</Text>
+                                            <Text>Time: {new Date(entry.$createdAt).toLocaleTimeString([], {
+                                                hour: 'numeric',
+                                                minute: '2-digit',
+                                                hour12: true,
+                                            })}</Text>
+                                            <Text>Date: {new Date(entry.$createdAt).toLocaleDateString('en-GB', {
+                                                day: 'numeric',
+                                                month: 'short',
+                                                year: 'numeric'
+                                            })}</Text>
+                                        </VStack>
+                                    </Link>
                                 </Box>
-                            ))}
+                            )) : (
+                                <Box p={4} bg="white" borderRadius="md" boxShadow="md" w="full">
+                                    <Text>No History Found</Text>
+                                </Box>
+                            )}
                         </VStack>
                     ) : (
                         <Box bg="white" p={4} borderRadius="md" boxShadow="md">
@@ -171,10 +187,14 @@ function FullHistory() {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {filteredHistory.map((entry, index) => (
+                                        {filteredHistory.length > 0 ? filteredHistory.map((entry, index) => (
                                             <Tr key={index}>
-                                                <Td>{entry.products && entry.products.title ? entry.products.title : 'unknown'}</Td>
-                                                <Td>{entry.products && entry.products.category && entry.products.category.name ? entry.products.category.name : "unknown"}</Td>
+                                                <Td>
+                                                    <Link to={`/products/${entry.products?.$id}`}>
+                                                        {entry.products?.title || 'unknown'}
+                                                    </Link>
+                                                </Td>
+                                                <Td>{entry.products?.category?.name || "unknown"}</Td>
                                                 <Td color={entry.quantity < 0 ? 'red.500' : 'green'}>
                                                     {entry.quantity}
                                                 </Td>
@@ -194,7 +214,11 @@ function FullHistory() {
                                                     })}
                                                 </Td>
                                             </Tr>
-                                        ))}
+                                        )) : (
+                                            <Tr>
+                                                <Td colSpan="6" textAlign="center">No History Found</Td>
+                                            </Tr>
+                                        )}
                                     </Tbody>
                                 </Table>
                             </TableContainer>

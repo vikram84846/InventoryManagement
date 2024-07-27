@@ -1,6 +1,6 @@
 import { Box, Card, CardBody, CardHeader, Heading, HStack, VStack, Text, TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
 import React, { useContext, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 const Sidebar = React.lazy(() => import('../components/Sidebar'));
 import SearchBar from '../functionality/SearchBar';
 import { ProductContext } from '../context/ProductContext';
@@ -12,11 +12,12 @@ function SearchResult() {
 
     // Ensure `query` and `query.$id` are defined before filtering `history`
     const productTransactions = query ? history.filter(transaction => transaction.products && transaction.products.$id === query.$id) : [];
-    const currentProductDetail = products.find(product => product.$id === query.$id) || {};
+    const currentProductDetail = products.find(product => product.$id === query?.$id) || {};
 
     useEffect(() => {
         fetchHistory();
-    }, [fetchHistory]);
+        // console.log(query);
+    }, [fetchHistory, query]);
 
     if (!query) {
         return (
@@ -46,7 +47,9 @@ function SearchResult() {
                                     <Heading size='md'>Product Name</Heading>
                                 </CardHeader>
                                 <CardBody p={4}>
-                                    <Text fontSize='lg'>{currentProductDetail.title || query.title || 'N/A'}</Text>
+                                    <Link to={`/products/${query.$id}`}>
+                                        <Text fontSize='lg'>{currentProductDetail.title || query.title || 'N/A'}</Text>
+                                    </Link>
                                 </CardBody>
                             </Card>
                         </Box>
@@ -63,7 +66,7 @@ function SearchResult() {
                         <Box w={{ base: "100%", sm: "48%", md: "18%" }}>
                             <Card borderWidth="1px" borderColor={'purple.500'} borderRadius="lg" overflow="hidden" boxShadow="lg">
                                 <CardHeader bg="purple.200" p={4}>
-                                    <Heading size='md'>Stock</Heading>
+                                    <Heading size='md'>Stock Available</Heading>
                                 </CardHeader>
                                 <CardBody p={4}>
                                     <Text fontSize='lg' color={(productTransactions.length > 0 && productTransactions[0].products.quantity < 100) ? 'red.500' : 'green'}>
@@ -101,8 +104,8 @@ function SearchResult() {
                         </Box>
                     </HStack>
 
-                    {/* history */}
-                    <Heading size='xl' marginInline={'auto'} color="gray.700" fontWeight="semibold">Transaction History</Heading>
+                    {/* History */}
+                    <Heading size='xl' textAlign={'center'} marginInline={'auto'} color="gray.700" fontWeight="semibold">Transaction History</Heading>
                     <TableContainer>
                         <Table variant="striped" colorScheme="purple">
                             <Thead bg="purple.200">
@@ -113,13 +116,16 @@ function SearchResult() {
                                     <Th color="purple.700">Note</Th>
                                     <Th color="purple.700">Time</Th>
                                     <Th color="purple.700">Date</Th>
-                                    {/* Add more headers if needed */}
                                 </Tr>
                             </Thead>
                             <Tbody>
                                 {productTransactions.length > 0 ? productTransactions.map((entry, index) => (
                                     <Tr key={index} _hover={{ bg: "purple.50" }}>
-                                        <Td>{entry.products.title || 'N/A'}</Td>
+                                        <Td>
+                                            <Link to={`/products/${entry.products.$id}`}>
+                                                {entry.products.title || 'N/A'}
+                                            </Link>
+                                        </Td>
                                         <Td>{entry.products.category?.name || 'N/A'}</Td>
                                         <Td color={entry.quantity < 0 ? 'red.500' : 'green.500'}>
                                             {entry.quantity || 'N/A'}

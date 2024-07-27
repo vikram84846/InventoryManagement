@@ -12,6 +12,7 @@ import { ProductContext } from './context/ProductContext.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import getSession from './utils.js';
 import SignUpPage from './pages/SignUpPage.jsx';
+import ProductDetail from './pages/ProductDetail.jsx';
 
 function App() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -67,6 +68,14 @@ function App() {
                     </PrivateRoute>
                 }
             />
+             <Route
+                    path="/products/:productId"
+                    element={
+                        <PrivateRoute session={user}>
+                            <ProductDetail/>
+                        </PrivateRoute>
+                    }
+                />
             <Route
                 path="/history"
                 element={

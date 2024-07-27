@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Text, SimpleGrid, Card, CardBody, Heading, Flex, Icon, HStack, VStack } from '@chakra-ui/react';
+import { Button, Card, CardBody, Heading, Flex, Icon, HStack, VStack } from '@chakra-ui/react';
 import { FaBoxesStacked } from "react-icons/fa6";
 import { MdCategory } from 'react-icons/md';
 import { Link } from 'react-router-dom';

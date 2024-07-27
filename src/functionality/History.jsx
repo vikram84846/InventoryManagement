@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, TableCaption, Box } from '@chakra-ui/react';
 import { ProductContext } from '../context/ProductContext';
+import { Link } from 'react-router-dom';
 
 function History() {
     const { history } = useContext(ProductContext);
@@ -30,7 +31,9 @@ function History() {
                         return (
                             <Tr key={index}>
                                 <Td fontSize={{ base: 'sm', md: 'md' }}>
-                                    {product ? product.title : 'Unknown'}
+                                    <Link to={`/products/${entry.products?.$id}`}>
+                                        {product ? product.title : 'Unknown'}
+                                    </Link>
                                 </Td>
                                 <Td fontSize={{ base: 'sm', md: 'md' }}>
                                     {product && product.category ? product.category.name : 'Unknown'}

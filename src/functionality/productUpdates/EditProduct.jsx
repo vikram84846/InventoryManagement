@@ -26,15 +26,17 @@ import { ProductContext } from '../../context/ProductContext';
 function EditProduct({ product }) {
     const { category, fetchProducts } = useContext(ProductContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [productName, setProductName] = useState(product?.title);
-    const [productDescription, setProductDescription] = useState(product?.discription);
-    const [productCategory, setProductCategory] = useState(product?.category);
-    const [productPrice, setProductPrice] = useState(product?.price);
+
+    const [productName, setProductName] = useState(product?.title || '');
+    const [productDescription, setProductDescription] = useState(product?.discription || '');
+    const [productCategory, setProductCategory] = useState(product?.category?.$id || '');
+    const [productPrice, setProductPrice] = useState(product?.price || '');
+
     const toast = useToast();
 
     const productDetail = {
         title: productName,
-        description: productDescription,
+        discription: productDescription,
         category: productCategory,
         price: parseFloat(productPrice),
     };
@@ -45,7 +47,7 @@ function EditProduct({ product }) {
             fetchProducts();
             toast({
                 title: 'Success',
-                description: 'Product details have been updated successfully.',
+                description: 'Your product has been updated',
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
@@ -53,6 +55,7 @@ function EditProduct({ product }) {
             });
             onClose();
         } catch (error) {
+            console.error('Error updating product:', error);
             toast({
                 title: 'Error',
                 description: 'Failed to update product details.',
@@ -63,6 +66,7 @@ function EditProduct({ product }) {
             });
         }
     };
+    
 
     // Responsive size for modal
     const modalSize = useBreakpointValue({ base: 'md', md: 'md' });
@@ -99,7 +103,7 @@ function EditProduct({ product }) {
                                 onChange={(e) => setProductCategory(e.target.value)}
                                 bg='white'
                                 _focus={{ borderColor: 'blue.500' }}
-                                size='md' // Control size if needed
+                                size='md'
                             >
                                 {category.map((cat) => (
                                     <option key={cat.$id} value={cat.$id}>

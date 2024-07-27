@@ -32,6 +32,8 @@ import ShowRooms from '../components/ShowRooms';
 import Loading from '../components/Loading';
 import EditProduct from '../functionality/productUpdates/EditProduct';
 import DeleteProduct from '../functionality/productUpdates/DeleteProduct';
+import { Link } from 'react-router-dom';
+import SearchBar from '../functionality/SearchBar';
 const Sidebar = React.lazy(() => import('../components/Sidebar'));
 
 function AllProducts() {
@@ -51,6 +53,7 @@ function AllProducts() {
 
     const isMobileView = useBreakpointValue({ base: true, md: false });
 
+
     return (
         <>
             <Suspense fallback={<Loading />}>
@@ -61,6 +64,11 @@ function AllProducts() {
                     p={4}
                     bg="gray.100"
                 >
+                     <Center w="full" mb={4}>
+                        <Box w={{ base: "90%", md: "60%" }}>
+                            <SearchBar />
+                        </Box>
+                    </Center>
                     <Center mb={6} w="full">
                         <Heading size={isMobileView ? "md" : "lg"}>All Products</Heading>
                     </Center>
@@ -100,37 +108,39 @@ function AllProducts() {
                         <VStack spacing={4}>
                             {filteredProducts.length > 0 ? filteredProducts.map((product, index) => (
                                 <Box key={index} bg="white" p={4} borderRadius="md" boxShadow="md" w="full">
-                                    <VStack align="start" spacing={2}>
-                                        <HStack w={'full'} justify={'space-between'}>
-                                            <Text fontWeight="bold">{product.title || 'Unknown Title'}</Text>
-                                            <Menu>
-                                                <MenuButton
-                                                    as={IconButton}
-                                                    icon={<HiDotsVertical />}
-                                                    variant="ghost"
-                                                    aria-label="Options"
-                                                />
-                                                <MenuList minWidth="120px" maxWidth="120px" >
-                                                    <MenuItem>
-                                                        Edit<EditProduct product={product} />
-                                                    </MenuItem>
-                                                    <MenuItem>
-                                                        Delete<DeleteProduct product={product} />
-                                                    </MenuItem>
-                                                </MenuList>
-                                            </Menu>
-                                        </HStack>
-                                        <Text>{product.discription || 'No description available'}</Text>
-                                        <HStack spacing={1}>
-                                            <Icon as={MdAttachMoney} />
-                                            <Text>{product.price || 'N/A'}</Text>
-                                        </HStack>
-                                        <Text>{product.quantity || '0'} units</Text>
-                                        <HStack spacing={1}>
-                                            <Icon as={MdCategory} />
-                                            <Text>{product.category ? product.category.name : 'Unknown'}</Text>
-                                        </HStack>
-                                    </VStack>
+                                    <Link to={`/products/${product.$id}`}>
+                                        <VStack align="start" spacing={2}>
+                                            <HStack w={'full'} justify={'space-between'}>
+                                                <Text fontWeight="bold">{product.title || 'Unknown Title'}</Text>
+                                                <Menu>
+                                                    <MenuButton
+                                                        as={IconButton}
+                                                        icon={<HiDotsVertical />}
+                                                        variant="ghost"
+                                                        aria-label="Options"
+                                                    />
+                                                    <MenuList minWidth="120px" maxWidth="120px" >
+                                                        <MenuItem>
+                                                            Edit<EditProduct product={product} />
+                                                        </MenuItem>
+                                                        <MenuItem>
+                                                            Delete<DeleteProduct product={product} />
+                                                        </MenuItem>
+                                                    </MenuList>
+                                                </Menu>
+                                            </HStack>
+                                            <Text>{product.discription || 'No description available'}</Text>
+                                            <HStack spacing={1}>
+                                                <Icon as={MdAttachMoney} />
+                                                <Text>{product.price || 'N/A'}</Text>
+                                            </HStack>
+                                            <Text>{product.quantity || '0'} units</Text>
+                                            <HStack spacing={1}>
+                                                <Icon as={MdCategory} />
+                                                <Text>{product.category ? product.category.name : 'Unknown'}</Text>
+                                            </HStack>
+                                        </VStack>
+                                    </Link>
                                 </Box>
                             )) : (
                                 <Text>No products found</Text>
@@ -173,7 +183,11 @@ function AllProducts() {
                                     <Tbody>
                                         {filteredProducts.length > 0 ? filteredProducts.map((product, index) => (
                                             <Tr key={index}>
-                                                <Td>{product.title || 'Unknown Title'}</Td>
+                                                <Td>
+                                                    <Link to={`/products/${product.$id}`}>
+                                                        {product.title || 'Unknown Title'}
+                                                    </Link>
+                                                </Td>
                                                 <Td>{product.discription || 'No description available'}</Td>
                                                 <Td>
                                                     <HStack spacing={1}>
@@ -202,12 +216,13 @@ function AllProducts() {
                                             </Tr>
                                         )) : (
                                             <Tr>
-                                                <Td colSpan="5" textAlign="center">No products found</Td>
+                                                <Td colSpan="7" textAlign="center">No products found</Td>
                                             </Tr>
                                         )}
                                     </Tbody>
                                 </Table>
                             </TableContainer>
+
                         </Box>
                     )}
                 </Flex>

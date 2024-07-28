@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { MdPersonAdd } from 'react-icons/md';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { db } from '../appwrite/appwriteService'; // Import db from appwriteService
 
 function SignUpPage() {
   const [name, setName] = useState('');
@@ -26,6 +27,14 @@ function SignUpPage() {
   const toast = useToast();
 
   const handleClick = () => setShow(!show);
+
+  const user = {
+    name: name,
+    email: email,
+    password: password,
+    bio: bio,
+    birth: dob
+  }
 
   const handleSignUp = async () => {
     if (!name || !email || !dob || !password) {
@@ -42,17 +51,19 @@ function SignUpPage() {
 
     setLoading(true);
     try {
-      // Replace this with your actual signup logic
-      // const response = await signUp(name, email, dob, password, bio);
+      // Create a new user document
+      const response = await db.users.create(user);
 
       toast({
         title: 'Sign Up successful',
-        description: 'Your account has been created',
+        description: `${name} your account has been created`,
         status: 'success',
         duration: 3000,
         isClosable: true,
         position: 'top-right'
       });
+
+      console.log('Document created successfully:', response);
     } catch (error) {
       toast({
         title: 'Sign Up failed',
@@ -62,6 +73,7 @@ function SignUpPage() {
         isClosable: true,
         position: 'top-right'
       });
+      console.error('Error creating document:', error);
     } finally {
       setLoading(false);
     }
@@ -129,7 +141,7 @@ function SignUpPage() {
                 aria-label="Password"
               />
               <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm"  onClick={handleClick}>
+                <Button h="1.75rem" size="sm" onClick={handleClick}>
                   {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                 </Button>
               </InputRightElement>

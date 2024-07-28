@@ -61,6 +61,9 @@ collections.forEach(col => {
         },
         list: async (query = [Query.orderDesc('$createdAt')]) => {
             try {
+                if (col.name === 'products') {
+                    query.push(Query.limit(200));
+                } 
                 const response = await databases.listDocuments(
                     col.databaseId,
                     col.collectionId,

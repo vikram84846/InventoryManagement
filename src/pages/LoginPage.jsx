@@ -8,13 +8,14 @@ import {
     Heading,
     Input,
     Stack,
+    Text,
     useToast
 } from '@chakra-ui/react';
-import { loginAccount } from '../appwrite/Services';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
 import { MdLogin } from 'react-icons/md';
 import { ProductContext } from '../context/ProductContext';
+import { auth } from '../appwrite/appwriteService';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -27,7 +28,7 @@ function LoginPage() {
     const handleLogin = async () => {
         setLoading(true);
         try {
-            const response = await loginAccount(email, password);
+            const response = await auth.login(email, password);
             setUser(response);
             document.cookie = `session=${JSON.stringify(response)}; path=/; max-age=${2 * 24 * 60 * 60}`;
             console.log('Session cookie set');
@@ -102,8 +103,15 @@ function LoginPage() {
                         Sign In
                     </Button>
                 </Stack>
-                <Center w={'100%'}>
+                {/* <Center w={'100%'}>
                     <Logout />
+                </Center> */}
+                <Center w={'100%'} my={5}>
+                    <Link to={'/signup'} color='white'>
+                        <Text fontSize={'sm'} color={'white'}>
+                            Don't have an account? create one
+                        </Text>
+                    </Link>
                 </Center>
             </Box>
         </Box>

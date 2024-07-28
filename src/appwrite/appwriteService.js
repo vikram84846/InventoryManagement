@@ -1,5 +1,6 @@
 import { Client, Account, Databases, ID, Query } from "appwrite";
 
+
 // Initialize the client
 const client = new Client();
 
@@ -10,6 +11,7 @@ client
 // Initialize the databases and account
 const databases = new Databases(client);
 const account = new Account(client);
+
 
 // Collection configurations
 const collections = [
@@ -32,11 +34,6 @@ const collections = [
         databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
         collectionId: import.meta.env.VITE_APPWRITE_COLLECTION_LOCATION_ID,
         name: 'locations'
-    },
-    {
-        databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
-        collectionId: import.meta.env.VITE_APPWRITE_COLLECTION_USER_ID,
-        name: 'users'
     }
 ];
 
@@ -63,7 +60,7 @@ collections.forEach(col => {
             try {
                 if (col.name === 'products') {
                     query.push(Query.limit(200));
-                } 
+                }
                 const response = await databases.listDocuments(
                     col.databaseId,
                     col.collectionId,
@@ -118,8 +115,27 @@ collections.forEach(col => {
     };
 });
 
+
+
+
 // Authentication functions
 const auth = {
+
+    create: async (name, email, password) => {
+        try {
+            const response = await account.create(
+                ID.unique(),
+                email, // Make sure this is the email
+                password,
+                name  // Additional attributes
+            );
+            return response;
+        } catch (error) {
+            console.log('Error while creating user:', error.message);
+            throw error;
+        }
+    },
+
     login: async (email, password) => {
         try {
             await account.createEmailPasswordSession(email, password);
@@ -151,6 +167,7 @@ const auth = {
         }
     }
 };
+
 
 export {
     db,

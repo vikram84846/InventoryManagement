@@ -1,9 +1,9 @@
 import { Button, useToast } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { MdLogout } from 'react-icons/md';
-import { logout } from '../appwrite/Services';
 import { useNavigate } from 'react-router-dom';
 import { ProductContext } from '../context/ProductContext';
+import { auth } from '../appwrite/appwriteService';
 
 function Logout() {
     const toast = useToast(); // Initialize useToast hook
@@ -12,7 +12,7 @@ function Logout() {
 
     const handleLogout = async () => {
         try {
-            await logout();
+            await auth.logout();
             document.cookie = 'session=; path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             console.log('Session cookie cleared');
             setUser(null); // Ensure user context is cleared if used

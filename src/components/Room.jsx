@@ -17,15 +17,15 @@ import {
   Icon,
   useToast // Import useToast hook
 } from '@chakra-ui/react';
-import { createLocation } from '../appwrite/Services';
 import { ProductContext } from '../context/ProductContext';
 import { FaWarehouse } from 'react-icons/fa6';
+import { db } from '../appwrite/appwriteService';
 
 function Room() {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const { wareHouse, fetchWareHouse } = useContext(ProductContext);
+  const { wareHouse, fetchWareHouse, user } = useContext(ProductContext);
   const toast = useToast(); // Initialize useToast hook
 
   const handleOpen = () => setIsOpen(true);
@@ -33,8 +33,8 @@ function Room() {
 
   const handleCreateLocation = async () => {
     try {
-      const data = { name, description };
-      await createLocation(data);
+      const data = { name, description, userId: user.$id };
+      await db.locations.create(data);
       setName('');
       fetchWareHouse();
       setDescription('');

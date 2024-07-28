@@ -1,17 +1,22 @@
 import React, { useContext, useState } from 'react';
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react';
-import { createCategory } from '../appwrite/Services';
 import { ProductContext } from '../context/ProductContext';
+import { db } from '../appwrite/appwriteService';
 
 function AddCategory() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [categoryName, setCategoryName] = useState('');
-    const { fetchCategories } = useContext(ProductContext);
+    const { fetchCategories, user } = useContext(ProductContext);
     const toast = useToast(); // Initialize useToast hook
 
     const handleCreateCategory = async () => {
+
+        const data = {
+            name: categoryName,
+            userId: user.$id
+        }
         try {
-            const response = await createCategory(categoryName);
+            const response = await db.categories.create(data);
             // console.log(response);
             fetchCategories();
             onClose(); // Close modal after successful category creation

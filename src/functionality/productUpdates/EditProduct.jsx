@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { updateProduct } from '../../appwrite/Services';
 import {
     Modal,
     ModalOverlay,
@@ -22,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { MdEdit } from 'react-icons/md';
 import { ProductContext } from '../../context/ProductContext';
+import { db } from '../../appwrite/appwriteService';
 
 function EditProduct({ product }) {
     const { category, fetchProducts } = useContext(ProductContext);
@@ -43,7 +43,7 @@ function EditProduct({ product }) {
 
     const handleSubmit = async () => {
         try {
-            await updateProduct(product?.$id, productDetail);
+            await db.products.update(product?.$id, productDetail);
             fetchProducts();
             toast({
                 title: 'Success',
@@ -66,7 +66,7 @@ function EditProduct({ product }) {
             });
         }
     };
-    
+
 
     // Responsive size for modal
     const modalSize = useBreakpointValue({ base: 'md', md: 'md' });

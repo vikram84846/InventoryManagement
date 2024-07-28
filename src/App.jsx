@@ -13,6 +13,8 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import getSession from './utils.js';
 import SignUpPage from './pages/SignUpPage.jsx';
 import ProductDetail from './pages/ProductDetail.jsx';
+import Logout from './components/Logout.jsx';
+import LogoutPage from './pages/LogoutPage.jsx';
 
 function App() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -30,7 +32,10 @@ function App() {
 
     useEffect(() => {
         // Redirect to login if no user context is found and user is trying to access protected routes
-        if (isLoaded && !user && window.location.pathname !== '/login') {
+        if (isLoaded && !user
+            && window.location.pathname !== '/login'
+            && window.location.pathname !== '/signup'
+            && window.location.pathname !== '/logout') {
             navigate('/login');
         }
     }, [isLoaded, user, navigate]);
@@ -42,6 +47,8 @@ function App() {
     return (
         <Routes>
             <Route path="/loading" element={<Loading />} />
+            <Route path="/Signup" element={<SignUpPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
             <Route
                 path="/home"
                 element={
@@ -59,7 +66,6 @@ function App() {
                 }
             />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/Signup" element={<SignUpPage />} />
             <Route
                 path="/products"
                 element={
@@ -68,14 +74,14 @@ function App() {
                     </PrivateRoute>
                 }
             />
-             <Route
-                    path="/products/:productId"
-                    element={
-                        <PrivateRoute session={user}>
-                            <ProductDetail/>
-                        </PrivateRoute>
-                    }
-                />
+            <Route
+                path="/products/:productId"
+                element={
+                    <PrivateRoute session={user}>
+                        <ProductDetail />
+                    </PrivateRoute>
+                }
+            />
             <Route
                 path="/history"
                 element={

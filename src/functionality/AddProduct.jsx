@@ -16,11 +16,12 @@ import {
     useToast // Import useToast hook
 } from '@chakra-ui/react';
 import { ProductContext } from '../context/ProductContext';
-import { createProduct } from '../appwrite/Services';
+// import { createProduct } from '../appwrite/Services';
+import { db } from '../appwrite/appwriteService';
 
 function AddProduct() {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { category, fetchProducts, wareHouse } = useContext(ProductContext);
+    const { category, fetchProducts, wareHouse, user } = useContext(ProductContext);
     const [productName, setProductName] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [productCategory, setProductCategory] = useState('');
@@ -29,6 +30,8 @@ function AddProduct() {
     const [productLocation, setProductLocation] = useState('');
     const toast = useToast(); // Initialize useToast hook
 
+
+
     const handleCreateProduct = async () => {
         const product = {
             title: productName,
@@ -36,14 +39,16 @@ function AddProduct() {
             category: productCategory,
             price: parseFloat(productPrice),
             quantity: parseInt(productQuantity),
-            location: [productLocation]
+            location: [productLocation],
+            userId: user.$id
         };
 
         try {
-            const response = await createProduct(product);
+            const response = await db.products.create(product);
             // console.log(response);
             fetchProducts();
             onClose(); // Close the modal after successful creation
+            console.log(user);
 
             // Show success toast notification
             toast({
@@ -57,10 +62,11 @@ function AddProduct() {
         } catch (error) {
             console.error('Error creating product:', error);
 
-            // Show error toast notification
+           
             toast({
                 title: 'Error',
                 description: 'Failed to create product.',
+                // description: error,
                 status: 'error',
                 duration: 3000,
                 isClosable: true,

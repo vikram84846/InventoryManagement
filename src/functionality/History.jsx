@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom';
 function History() {
     const { history } = useContext(ProductContext);
 
+    const historyToShow = history.slice(0, 5);
+    const historyCount = historyToShow.length;
+    const captionText = historyCount === 5 ? "Last 5 updates" : `Last ${historyCount} update${historyCount === 1 ? '' : 's'}`;
+
     return (
         <Box mt={8} overflowX="auto"> {/* Make the container scrollable horizontally on small screens */}
             <Table
@@ -25,7 +29,7 @@ function History() {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {history.slice(0, 5).map((entry, index) => {
+                    {historyToShow.map((entry, index) => {
                         const product = entry.products;
 
                         return (
@@ -49,7 +53,7 @@ function History() {
                         );
                     })}
                 </Tbody>
-                <TableCaption fontSize={{ base: 'sm', md: 'md' }}>Last 5 updates</TableCaption>
+                <TableCaption fontSize={{ base: 'sm', md: 'md' }}>{captionText}</TableCaption>
             </Table>
         </Box>
     );

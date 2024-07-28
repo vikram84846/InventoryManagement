@@ -1,5 +1,4 @@
-import React from 'react';
-import { DeleteDocument } from '../../appwrite/Services';
+import React, { useContext } from 'react';
 import {
     IconButton,
     Modal,
@@ -15,18 +14,22 @@ import {
     useToast
 } from '@chakra-ui/react';
 import { MdDelete } from 'react-icons/md';
+import { ProductContext } from '../../context/ProductContext';
+import { db } from '../../appwrite/appwriteService';
+
 
 function DeleteProduct({ product }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { fetchProducts } = useContext(ProductContext)
     const toast = useToast();
 
     const handleDelete = async () => {
         try {
-            const response = await DeleteDocument(product?.$id);
+            const response = await db.products.delete(product?.$id);
             console.log('this is response', product?.$id);
             console.log(response)
             // console.log('this is response', p);
-
+            fetchProducts()
             toast({
                 title: 'Product Deleted',
                 description: 'Product has been deleted successfully.',

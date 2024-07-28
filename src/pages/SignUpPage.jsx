@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Box,
   Button,
+  Center,
   FormControl,
   FormLabel,
   Heading,
@@ -9,71 +10,53 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  Textarea,
+  Text,
   useToast
 } from '@chakra-ui/react';
 import { MdPersonAdd } from 'react-icons/md';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { db } from '../appwrite/appwriteService'; // Import db from appwriteService
+import { auth } from '../appwrite/appwriteService'; // Import auth from appwriteService
+import { Link, useNavigate } from 'react-router-dom';
 
 function SignUpPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [dob, setDob] = useState('');
   const [password, setPassword] = useState('');
-  const [bio, setBio] = useState('');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const toast = useToast();
 
+
+  const navigate = useNavigate()
   const handleClick = () => setShow(!show);
 
-  const user = {
-    name: name,
-    email: email,
-    password: password,
-    bio: bio,
-    birth: dob
-  }
-
   const handleSignUp = async () => {
-    if (!name || !email || !dob || !password) {
-      toast({
-        title: 'Validation Error',
-        description: 'Please fill out all required fields',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-right'
-      });
-      return;
-    }
-
     setLoading(true);
     try {
-      // Create a new user document
-      const response = await db.users.create(user);
-
+      const response = await auth.create(name, email, password);
+      // console.log(response);
       toast({
-        title: 'Sign Up successful',
-        description: `${name} your account has been created`,
-        status: 'success',
-        duration: 3000,
+        title: "Account created.",
+        description: "Your account has been created successfully.",
+        status: "success",
+        duration: 5000,
         isClosable: true,
         position: 'top-right'
       });
-
-      console.log('Document created successfully:', response);
+      if (response) {
+        navigate('/login', { replace: true });
+      }
     } catch (error) {
+      console.error('Error creating account: ', error.message);
       toast({
-        title: 'Sign Up failed',
-        description: error.message || 'An error occurred',
-        status: 'error',
-        duration: 3000,
+        title: "Error",
+        description: error.message || "An error occurred while creating your account.",
+        status: "error",
+        duration: 5000,
         isClosable: true,
         position: 'top-right'
       });
-      console.error('Error creating document:', error);
     } finally {
       setLoading(false);
     }
@@ -119,14 +102,14 @@ function SignUpPage() {
               aria-label="Email"
             />
           </FormControl>
-          <FormControl id="dob" isRequired>
-            <FormLabel>Date of Birth</FormLabel>
+          <FormControl id="phone" isRequired>
+            <FormLabel>Phone</FormLabel>
             <Input
-              type="date"
-              placeholder="Enter your date of birth"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-              aria-label="Date of Birth"
+              type="text"
+              placeholder="Enter your phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              aria-label="Phone"
             />
           </FormControl>
           <FormControl id="password" isRequired>
@@ -141,20 +124,11 @@ function SignUpPage() {
                 aria-label="Password"
               />
               <InputRightElement width="4.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                  {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                <Button variant={'ghost'} h="1.75rem" size="sm" onClick={handleClick}>
+                  {show ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                 </Button>
               </InputRightElement>
             </InputGroup>
-          </FormControl>
-          <FormControl id="bio">
-            <FormLabel>Bio</FormLabel>
-            <Textarea
-              placeholder="Tell us a bit about yourself"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              aria-label="Bio"
-            />
           </FormControl>
           <Button
             colorScheme="teal"
@@ -166,6 +140,13 @@ function SignUpPage() {
           >
             Sign Up
           </Button>
+          <Center w={'100%'}>
+            <Link to={'/login'} color='white'>
+              <Text fontSize={'sm'} color={'white'}>
+                Already have an account? login
+              </Text>
+            </Link>
+          </Center>
         </Stack>
       </Box>
     </Box>

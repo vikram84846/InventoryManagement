@@ -71,11 +71,25 @@ function Sidebar() {
                                             History
                                         </Button>
                                     </Link>
-
                                 </VStack>
                             </DrawerBody>
                             <DrawerFooter>
-                                <Logout />
+                                <VStack align="start" spacing={4} w="100%">
+                                    <Link to={'/profile'}>
+                                        <Button
+                                            p={5}
+                                            leftIcon={<FaUserAlt />}
+                                            variant={'ghost'}
+                                            color={'white'}
+                                            fontWeight={'bold'}
+                                            fontSize={'large'}
+                                            _hover={{ bg: 'purple.700' }}
+                                        >
+                                            Profile
+                                        </Button>
+                                    </Link>
+                                    <Logout />
+                                </VStack>
                             </DrawerFooter>
                         </DrawerContent>
                     </DrawerOverlay>

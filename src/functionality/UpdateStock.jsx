@@ -19,10 +19,11 @@ import {
     FormHelperText,
     useToast
 } from '@chakra-ui/react';
-import { createHistory, updateProduct } from '../appwrite/Services';
+// import { createHistory, updateProduct } from '../appwrite/Services';
+import { db } from '../appwrite/appwriteService';
 
 function UpdateStock() {
-    const { products, fetchProducts, fetchHistory } = useContext(ProductContext);
+    const { products, fetchProducts, fetchHistory, user } = useContext(ProductContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [quantityInput, setQuantityInput] = useState('');
     const [selectedProduct, setSelectedProduct] = useState('');
@@ -55,7 +56,7 @@ function UpdateStock() {
     const handleProductSelect = (productId) => {
         const product = products.find((p) => p.$id === productId);
         setSelectedProduct(productId);
-        setSearchTerm(product.title); 
+        setSearchTerm(product.title);
         setQuantityInput('');
         setSuggestions([]);
     };
@@ -65,10 +66,11 @@ function UpdateStock() {
             products: selectedProduct,
             quantity: parseInt(quantityInput),
             note: note,
+            userId: user.$id
         };
 
         try {
-            const response = await createHistory(value);
+            const response = await db.history.create(value);
         } catch (error) {
             console.log(error + ' from create history function from service file');
             throw error;
@@ -79,7 +81,7 @@ function UpdateStock() {
         const updatedQuantity = detailsOfSelectedProduct.quantity + parseInt(quantityInput);
 
         try {
-            const response = await updateProduct(selectedProduct, { quantity: updatedQuantity });
+            const response = await db.products.update(selectedProduct, { quantity: updatedQuantity });
             await createStockHistory();
             fetchProducts();
             fetchHistory();

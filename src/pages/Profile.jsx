@@ -22,25 +22,35 @@ function Profile() {
         <>
             <Suspense fallback={<Loading />}>
                 <Sidebar />
-                <Flex ml="250px" justify="center" align="center" minH="100vh" bg="gray.100" p={4}>
+                <Flex
+                    ml={{ base: 0, md: '250px' }}
+                    justify="center"
+                    align="center"
+                    minH="100vh"
+                    bg="gray.100"
+                    p={4}
+                >
                     <Box
                         bg="white"
                         p={8}
                         borderRadius="md"
                         boxShadow="lg"
-                        w="100%"
+                        w={{ base: '90%', md: '100%' }}
                         maxW="md"
                         textAlign="center"
+                        rounded={10}
                     >
                         <VStack spacing={4}>
                             <Avatar size="2xl" name={user.name || 'User'} src="https://bit.ly/broken-link" />
                             <Heading size="lg" color="purple.700">{user.name || 'Your Name'}</Heading>
-                            <Text fontSize="md" color="gray.600">{user.email || 'your.email@example.com'}</Text>
                             <Text fontSize="md" color="gray.600">
-                                Bio: {user.bio || 'I’m not arguing, I’m just explaining why I’m right.'}
+                                📧 {user.email || 'your.email@example.com'}
                             </Text>
                             <Text fontSize="md" color="gray.600">
-                                Location: {user.location || 'Planet Earth, Not in the mood for a vacation.'}
+                                📝 Bio: {user.bio || 'I’m not arguing, I’m just explaining why I’m right.'}
+                            </Text>
+                            <Text fontSize="md" color="gray.600">
+                                🌍 Location: {user.location || 'Planet Earth, Not in the mood for a vacation.'}
                             </Text>
                         </VStack>
                     </Box>

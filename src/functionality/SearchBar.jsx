@@ -1,9 +1,9 @@
 import { Flex, Input, IconButton, useToast, Box, List, ListItem } from '@chakra-ui/react'
 import React, { useContext, useState, useEffect } from 'react'
-import { searchProduct } from '../appwrite/Services'
 import { ProductContext } from '../context/ProductContext'
 import { SearchIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
+import { db } from '../appwrite/appwriteService'
 
 function SearchBar() {
   const toast = useToast()
@@ -45,7 +45,7 @@ function SearchBar() {
       const productselected = suggestions.find((product) => product.title === productName)
       if (productselected) {
         const idOfProduct = (productselected.$id).toString()
-        const response = await searchProduct(idOfProduct)
+        const response = await db.products.get(idOfProduct)
         toast({
           title: 'Product found',
           description: productName,

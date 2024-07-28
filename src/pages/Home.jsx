@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext, useEffect } from 'react';
 const Sidebar = React.lazy(() => import('../components/Sidebar'));
 import Category from '../components/Category';
 import Products from '../components/Products';
@@ -8,8 +8,25 @@ import History from '../functionality/History';
 import GraphChart from '../functionality/GraphChart';
 import Room from '../components/Room';
 import Loading from '../components/Loading';
+import { ProductContext } from '../context/ProductContext';
+
+
 
 function Home() {
+
+    const {
+        fetchProducts,
+        fetchCategories,
+        fetchHistory,
+        fetchWareHouse
+    } = useContext(ProductContext)
+    useEffect(() => {
+        fetchProducts();
+        fetchCategories();
+        fetchHistory();
+        fetchWareHouse();
+    }, [])
+
     return (
         <Box>
             <Suspense fallback={<Loading />}>

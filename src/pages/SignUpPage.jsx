@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Center,
+  Divider,
   FormControl,
   FormLabel,
   Heading,
@@ -11,12 +12,14 @@ import {
   InputRightElement,
   Stack,
   Text,
-  useToast
+  useToast,
+  HStack
 } from '@chakra-ui/react';
 import { MdPersonAdd } from 'react-icons/md';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { auth } from '../appwrite/appwriteService'; // Import auth from appwriteService
 import { Link, useNavigate } from 'react-router-dom';
+import LoginWithGoogle from '../components/LoginWithGoogle';
 
 function SignUpPage() {
   const [name, setName] = useState('');
@@ -27,15 +30,13 @@ function SignUpPage() {
   const [show, setShow] = useState(false);
   const toast = useToast();
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleClick = () => setShow(!show);
 
   const handleSignUp = async () => {
     setLoading(true);
     try {
       const response = await auth.create(name, email, password);
-      // console.log(response);
       toast({
         title: "Account created.",
         description: "Your account has been created successfully.",
@@ -76,9 +77,10 @@ function SignUpPage() {
         borderWidth={1}
         borderRadius={8}
         boxShadow="lg"
+        // maxH={'90vh'}
         bg="rgba(255, 255, 255, 0.08)"
       >
-        <Stack spacing={4}>
+        <Stack spacing={3}>
           <Heading textAlign="center" size="xl">
             Sign Up
           </Heading>
@@ -130,23 +132,34 @@ function SignUpPage() {
               </InputRightElement>
             </InputGroup>
           </FormControl>
-          <Button
-            colorScheme="teal"
-            variant="solid"
-            leftIcon={<MdPersonAdd />}
-            onClick={handleSignUp}
-            isLoading={loading}
-            isDisabled={loading}
-          >
-            Sign Up
-          </Button>
+          <Center>
+            <Button
+              colorScheme="teal"
+              variant="solid"
+              leftIcon={<MdPersonAdd />}
+              onClick={handleSignUp}
+              isLoading={loading}
+              isDisabled={loading}
+              w={['auto','60%']}
+            >
+              Sign Up
+            </Button>
+          </Center>
           <Center w={'100%'}>
             <Link to={'/login'} color='white'>
               <Text fontSize={'sm'} color={'white'}>
-                Already have an account? login
+                Already have an account? Login
               </Text>
             </Link>
           </Center>
+          <HStack spacing={5} align="center">
+            <Divider />
+            <Text fontSize="sm" fontWeight="medium" color="white">
+              or
+            </Text>
+            <Divider />
+          </HStack>
+          <LoginWithGoogle />
         </Stack>
       </Box>
     </Box>

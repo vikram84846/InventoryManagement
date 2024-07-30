@@ -32,7 +32,7 @@ export const ProductProvider = ({ children }) => {
       setProducts(filteredProducts);
       // console.log('Filtered Products:', filteredProducts);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      // console.error('Error fetching products:', error);
     }
   };
 
@@ -45,7 +45,7 @@ export const ProductProvider = ({ children }) => {
       setCategory(data.documents);
       // console.log('Categories:', data.documents);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      // console.error('Error fetching categories:', error);
     }
   };
 
@@ -58,7 +58,7 @@ export const ProductProvider = ({ children }) => {
       setHistory(data.documents);
       // console.log('History:', data.documents);
     } catch (error) {
-      console.error('Error fetching history:', error);
+      // console.error('Error fetching history:', error);
     }
   };
 
@@ -71,7 +71,7 @@ export const ProductProvider = ({ children }) => {
       setWarehouse(data.documents); // Assuming `data.documents` contains the array of locations
       // console.log('Location:', data.documents);
     } catch (error) {
-      console.error('Error fetching location:', error);
+      // console.error('Error fetching location:', error);
     }
   };
 

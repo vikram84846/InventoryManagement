@@ -68,7 +68,7 @@ collections.forEach(col => {
                 );
                 return response;
             } catch (error) {
-                console.log(`Error listing documents in ${col.name} collection:`, error);
+                // console.log(`Error listing documents in ${col.name} collection:`, error);
                 throw error;
             }
         },
@@ -120,15 +120,22 @@ collections.forEach(col => {
 
 // Authentication functions
 const auth = {
-
     create: async (name, email, password) => {
         try {
             const response = await account.create(
                 ID.unique(),
-                email, // Make sure this is the email
+                email,
                 password,
-                name  // Additional attributes
+                name
             );
+            console.log('User created successfully:', response);
+
+            // Send verification email
+            // const verificationResponse = await account.createVerification(
+            //     'http://localhost:5173/verify-email' 
+            // );
+            // console.log('Verification email sent:', verificationResponse);
+
             return response;
         } catch (error) {
             console.log('Error while creating user:', error.message);
@@ -164,6 +171,40 @@ const auth = {
             console.log('User logged out successfully');
         } catch (error) {
             console.log('Error while logging out: ' + error.message);
+        }
+    },
+
+    verifyEmail: async (userId, secret) => {
+        try {
+            const response = await account.updateVerification(userId, secret);
+            console.log('Email verified successfully:', response);
+            return response;
+        } catch (error) {
+            console.log('Error while verifying email:', error.message);
+            throw error;
+        }
+    },
+    loginWithGoogle: async () => {
+        try {
+            const response = account.createOAuth2Session(
+                'google',
+                'http://localhost:5173/profile',
+                'http://localhost:5173/signup'
+            );
+            console.log('User logged in with Google:', response);
+        } catch (error) {
+            console.log('Error while logging in with Google:', error.message);
+            throw error;
+        }
+    },
+    getAccount: async () => {
+        try {
+            const response = await account.get(); // Get the current authenticated user's data
+            console.log('User data:', response);
+            return response;
+        } catch (error) {
+            console.log('Error fetching user data:', error.message);
+            throw error;
         }
     }
 };

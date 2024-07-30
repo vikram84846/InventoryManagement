@@ -15,6 +15,7 @@ import SignUpPage from './pages/SignUpPage.jsx';
 import ProductDetail from './pages/ProductDetail.jsx';
 import Logout from './components/Logout.jsx';
 import LogoutPage from './pages/LogoutPage.jsx';
+import VerifyEmail from './functionality/VerifyEmail.jsx';
 
 function App() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -31,11 +32,8 @@ function App() {
     }, [setUser]);
 
     useEffect(() => {
-        // Redirect to login if no user context is found and user is trying to access protected routes
         if (isLoaded && !user
-            && window.location.pathname !== '/login'
-            && window.location.pathname !== '/signup'
-            && window.location.pathname !== '/logout') {
+            && !['/login', '/signup', '/logout', '/verify-email', '/profile'].includes(window.location.pathname)) {
             navigate('/login');
         }
     }, [isLoaded, user, navigate]);
@@ -49,6 +47,10 @@ function App() {
             <Route path="/loading" element={<Loading />} />
             <Route path="/Signup" element={<SignUpPage />} />
             <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+
             <Route
                 path="/home"
                 element={
@@ -65,7 +67,6 @@ function App() {
                     </PrivateRoute>
                 }
             />
-            <Route path="/login" element={<LoginPage />} />
             <Route
                 path="/products"
                 element={
@@ -90,14 +91,14 @@ function App() {
                     </PrivateRoute>
                 }
             />
-            <Route
+            {/* <Route
                 path="/profile"
                 element={
                     <PrivateRoute session={user}>
                         <Profile />
                     </PrivateRoute>
                 }
-            />
+            /> */}
             <Route
                 path="/search"
                 element={

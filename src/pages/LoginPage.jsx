@@ -3,19 +3,21 @@ import {
     Box,
     Button,
     Center,
+    Divider,
     FormControl,
     FormLabel,
     Heading,
+    HStack,
     Input,
     Stack,
     Text,
     useToast
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logout from '../components/Logout';
 import { MdLogin } from 'react-icons/md';
 import { ProductContext } from '../context/ProductContext';
 import { auth } from '../appwrite/appwriteService';
+import LoginWithGoogle from '../components/LoginWithGoogle';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -70,7 +72,7 @@ function LoginPage() {
                 boxShadow="lg"
                 bg="rgba(255, 255, 255, 0.08)"
             >
-                <Stack spacing={4}>
+                <Stack spacing={6}>
                     <Heading textAlign="center" size="xl">
                         Login
                     </Heading>
@@ -93,26 +95,34 @@ function LoginPage() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </FormControl>
-                    <Button
-                        colorScheme="teal"
-                        variant="solid"
-                        leftIcon={<MdLogin />}
-                        onClick={handleLogin}
-                        isLoading={loading}
-                    >
-                        Sign In
-                    </Button>
+                    <Center>
+                        <Button
+                            colorScheme="teal"
+                            variant="solid"
+                            leftIcon={<MdLogin />}
+                            onClick={handleLogin}
+                            isLoading={loading}
+                            w={['auto', '60%']}
+                        >
+                            Sign In
+                        </Button>
+                    </Center>
                 </Stack>
-                {/* <Center w={'100%'}>
-                    <Logout />
-                </Center> */}
-                <Center w={'100%'} my={5}>
+                {/* <Center mt={4} mb={6}>
                     <Link to={'/signup'} color='white'>
                         <Text fontSize={'sm'} color={'white'}>
-                            Don't have an account? create one
+                            Don't have an account? Create one
                         </Text>
                     </Link>
-                </Center>
+                </Center> */}
+                <HStack spacing={2} align="center" my={6}>
+                    <Divider />
+                    <Text fontSize="sm" fontWeight="medium" color="white">
+                        or
+                    </Text>
+                    <Divider />
+                </HStack>
+                <LoginWithGoogle />
             </Box>
         </Box>
     );

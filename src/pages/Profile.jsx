@@ -1,20 +1,37 @@
 import { Center, Flex, Heading, Box, Text, Avatar, VStack } from '@chakra-ui/react';
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect, useContext } from 'react';
 import Loading from '../components/Loading';
-import getSession from '../utils';
+import { auth } from '../appwrite/appwriteService'; // Import auth from appwriteService
+import { ProductContext } from '../context/ProductContext'; // Import ProductContext
+
 const Sidebar = React.lazy(() => import('../components/Sidebar'));
 
 function Profile() {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const { setUser: setContextUser } = useContext(ProductContext); 
 
     useEffect(() => {
-        const session = getSession();
-        if (session) {
-            setUser(session);
-        }
-    }, []);
+        const fetchUserData = async () => {
+            try {
+                const userData = await auth.getAccount();
+                setUser(userData);
+                setContextUser(userData); 
 
-    if (!user) {
+                document.cookie = `session=${JSON.stringify(userData)}; path=/; max-age=${2 * 24 * 60 * 60}`;
+                console.log('Session cookie set');
+            } catch (error) {
+                console.error('Error fetching user data:', error.message);
+                window.location.href = '/login'; 
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [setContextUser]);
+
+    if (loading) {
         return <Loading />;
     }
 
@@ -41,7 +58,7 @@ function Profile() {
                         rounded={10}
                     >
                         <VStack spacing={4}>
-                            <Avatar size="2xl" name={user.name || 'User'} src="https://bit.ly/broken-link" />
+                            <Avatar size="2xl" name={user.name || 'User'} src={user.avatarUrl || "https://bit.ly/broken-link"} />
                             <Heading size="lg" color="purple.700">{user.name || 'Your Name'}</Heading>
                             <Text fontSize="md" color="gray.600">
                                 📧 {user.email || 'your.email@example.com'}

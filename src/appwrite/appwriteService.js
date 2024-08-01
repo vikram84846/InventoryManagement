@@ -189,7 +189,8 @@ const auth = {
             const response = account.createOAuth2Session(
                 'google',
                 'https://store-red-eight.vercel.app/profile',
-                'https://store-red-eight.vercel.app/signup'
+                'https://store-red-eight.vercel.app/signup',
+                
             );
             console.log('User logged in with Google:', response);
         } catch (error) {

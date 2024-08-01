@@ -33,6 +33,20 @@ function AddProduct() {
 
 
     const handleCreateProduct = async () => {
+
+        if (!productName || !productDescription || !productCategory || !productPrice || !productQuantity || !productLocation) {
+            toast({
+                title: 'Error',
+                description: 'All fields are required.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top-right',
+                variant: 'left-accent'
+            });
+            return; // Exit the function if validation fails
+        }
+
         const product = {
             title: productName,
             discription: productDescription, // Corrected spelling of 'description'
@@ -42,6 +56,8 @@ function AddProduct() {
             location: [productLocation],
             userId: user.$id
         };
+
+       
 
         try {
             const response = await db.products.create(product);

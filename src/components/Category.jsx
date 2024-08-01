@@ -4,6 +4,7 @@ import { FaCubesStacked } from "react-icons/fa6";
 import { MdCategory } from 'react-icons/md';
 
 import { ProductContext } from '../context/ProductContext';
+import { Link } from 'react-router-dom';
 
 function Category() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +46,9 @@ function Category() {
                                 <Card key={index}>
                                     <CardBody>
                                         <HStack justify={'space-between'}>
-                                            <Text fontWeight='bold'>{category.name}</Text>
+                                            <Link to={`/category/${category?.$id}`}>
+                                                <Text fontWeight='bold'>{category.name}</Text>
+                                            </Link>
                                             <HStack>
                                                 <Icon as={MdCategory} boxSize={4} />
                                                 <Text fontSize={'large'} fontWeight='bold'>{category.products.length}</Text>

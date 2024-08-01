@@ -40,7 +40,9 @@ function History() {
                                     </Link>
                                 </Td>
                                 <Td fontSize={{ base: 'sm', md: 'md' }}>
-                                    {product && product.category ? product.category.name : 'Unknown'}
+                                    <Link to={`/category/${product.category?.$id}`}>
+                                        {product && product.category ? product.category.name : 'Unknown'}
+                                    </Link>
                                 </Td>
                                 <Td fontSize={{ base: 'sm', md: 'md' }}>
                                     {product && product.location && product.location[0] ? product.location[0].name : 'N/A'}

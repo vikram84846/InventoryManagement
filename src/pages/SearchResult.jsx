@@ -59,7 +59,11 @@ function SearchResult() {
                                     <Heading size='md'>Category</Heading>
                                 </CardHeader>
                                 <CardBody p={4}>
-                                    <Text fontSize='lg'>{currentProductDetail.category?.name || query.category?.name || 'N/A'}</Text>
+                                    <Text fontSize='lg'>
+                                        <Link to={`/category/${currentProductDetail.category?.$id}`}>
+                                            {currentProductDetail.category?.name || query.category?.name || 'N/A'}
+                                        </Link>
+                                    </Text>
                                 </CardBody>
                             </Card>
                         </Box>
@@ -111,7 +115,6 @@ function SearchResult() {
                             <Thead bg="purple.200">
                                 <Tr>
                                     <Th color="purple.700">Product Name</Th>
-                                    <Th color="purple.700">Category</Th>
                                     <Th color="purple.700">Quantity</Th>
                                     <Th color="purple.700">Note</Th>
                                     <Th color="purple.700">Time</Th>
@@ -126,7 +129,6 @@ function SearchResult() {
                                                 {entry.products.title || 'N/A'}
                                             </Link>
                                         </Td>
-                                        <Td>{entry.products.category?.name || 'N/A'}</Td>
                                         <Td color={entry.quantity < 0 ? 'red.500' : 'green.500'}>
                                             {entry.quantity || 'N/A'}
                                         </Td>

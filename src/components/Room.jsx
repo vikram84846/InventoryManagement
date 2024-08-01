@@ -31,13 +31,14 @@ function Room() {
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
-  const handleCreateLocation = async () => {
+  const handleCreateLocation = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
     try {
       const data = { name, description, userId: user.$id };
       await db.locations.create(data);
       setName('');
-      fetchWareHouse();
       setDescription('');
+      fetchWareHouse();
       setIsOpen(false);
 
       // Show toast notification
@@ -86,30 +87,31 @@ function Room() {
         <ModalContent>
           <ModalHeader>Create Location</ModalHeader>
           <ModalBody>
-            <FormControl mt={4}>
-              <FormLabel>Name</FormLabel>
-              <Input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter location name"
-              />
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Input
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter location description"
-              />
-            </FormControl>
+            <form onSubmit={handleCreateLocation}> {/* Wrap inputs in form */}
+              <FormControl mt={4}>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter location name"
+                />
+              </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>Description</FormLabel>
+                <Input
+                  type="text"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter location description"
+                />
+              </FormControl>
+              <ModalFooter>
+                <Button type="submit" colorScheme="purple">Create</Button> {/* Ensure button type is 'submit' */}
+                <Button onClick={handleClose} ml={3}>Cancel</Button>
+              </ModalFooter>
+            </form>
           </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={handleCreateLocation} colorScheme="purple">Create</Button>
-            <Button onClick={handleClose} ml={3}>Cancel</Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>

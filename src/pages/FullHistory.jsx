@@ -127,9 +127,11 @@ function FullHistory() {
                                 <Box key={index} bg="white" p={4} borderRadius="md" boxShadow="md" w="full">
                                     <Link to={`/products/${entry.products?.$id}`}>
                                         <VStack align="start" spacing={2}>
-                                            <Text fontWeight="bold">Product Name: {entry.products?.title || 'unknown'}</Text>
+                                            <Text>Product Name: <b>{entry.products?.title || 'unknown'}</b> </Text>
                                             {/* <Text fontWeight="bold">Product ID: {entry.products?.$id || 'unknown'}</Text> */}
-                                            <Text>Category: {entry.products?.category?.name || "unknown"}</Text>
+                                            <Link to={`/category/${entry.products?.category?.$id}`}>
+                                                <Text >Category: <b>{entry.products?.category?.name || "unknown"}</b> </Text>
+                                            </Link>
                                             <Text color={entry.quantity < 0 ? 'red.500' : 'green'}>Quantity: {entry.quantity}</Text>
                                             <Text>Note: {entry.note}</Text>
                                             <Text>Time: {new Date(entry.$createdAt).toLocaleTimeString([], {
@@ -194,7 +196,11 @@ function FullHistory() {
                                                         {entry.products?.title || 'unknown'}
                                                     </Link>
                                                 </Td>
-                                                <Td>{entry.products?.category?.name || "unknown"}</Td>
+                                                <Td>
+                                                    <Link to={`/category/${entry.products?.category?.$id}`}>
+                                                        {entry.products?.category?.name || "unknown"}
+                                                    </Link>
+                                                </Td>
                                                 <Td color={entry.quantity < 0 ? 'red.500' : 'green'}>
                                                     {entry.quantity}
                                                 </Td>

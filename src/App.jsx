@@ -16,6 +16,7 @@ import ProductDetail from './pages/ProductDetail.jsx';
 import Logout from './components/Logout.jsx';
 import LogoutPage from './pages/LogoutPage.jsx';
 import VerifyEmail from './functionality/VerifyEmail.jsx';
+import CategoryDetail from './pages/CategoryDetail.jsx';
 
 function App() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -91,14 +92,14 @@ function App() {
                     </PrivateRoute>
                 }
             />
-            {/* <Route
-                path="/profile"
+            <Route
+                path="/Category/:categoryId"
                 element={
                     <PrivateRoute session={user}>
-                        <Profile />
+                        <CategoryDetail />
                     </PrivateRoute>
                 }
-            /> */}
+            />
             <Route
                 path="/search"
                 element={

@@ -32,8 +32,8 @@ function AddProduct() {
 
 
 
-    const handleCreateProduct = async () => {
-
+    const handleCreateProduct = async (e) => {
+        e.preventDefault()
         if (!productName || !productDescription || !productCategory || !productPrice || !productQuantity || !productLocation) {
             toast({
                 title: 'Error',
@@ -56,9 +56,6 @@ function AddProduct() {
             location: [productLocation],
             userId: user.$id
         };
-
-       
-
         try {
             const response = await db.products.create(product);
             // console.log(response);
@@ -78,7 +75,7 @@ function AddProduct() {
         } catch (error) {
             console.error('Error creating product:', error);
 
-           
+
             toast({
                 title: 'Error',
                 description: 'Failed to create product.',

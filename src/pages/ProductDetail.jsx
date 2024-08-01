@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
     VStack,
     HStack,
@@ -88,7 +88,13 @@ function ProductDetail() {
                         { title: 'Product Name', value: product.title || 'N/A' },
                         { title: 'Description', value: product.discription || 'N/A' },
                         { title: 'Stock available', value: productTransactions.length > 0 ? productTransactions[0].products.quantity : product.quantity },
-                        { title: 'Category', value: product.category?.name || 'N/A' },
+                        {
+                            title: 'Category', value: product.category ? (
+                                <Link to={`/category/${product.category.$id}`}>
+                                    {product.category.name}
+                                </Link>
+                            ) : 'N/A'
+                        },
                         { title: 'WareHouse', value: product.location[0]?.name || 'N/A' },
                         { title: 'Price', value: `$${product.price}` || 'N/A' },
                         { title: 'Created At', value: product.$createdAt ? `${new Date(product.$createdAt).toLocaleDateString()} At ${new Date(product.$createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'N/A' }
@@ -112,7 +118,6 @@ function ProductDetail() {
                         <Thead bg="purple.200">
                             <Tr>
                                 <Th color="purple.700">Product Name</Th>
-                                <Th color="purple.700">Category</Th>
                                 <Th color="purple.700">Quantity</Th>
                                 <Th color="purple.700">Note</Th>
                                 <Th color="purple.700">Time</Th>
@@ -123,7 +128,6 @@ function ProductDetail() {
                             {productTransactions.length > 0 ? productTransactions.map((entry, index) => (
                                 <Tr key={index} _hover={{ bg: "purple.50" }}>
                                     <Td>{entry.products.title || 'N/A'}</Td>
-                                    <Td>{entry.products.category?.name || 'N/A'}</Td>
                                     <Td color={entry.quantity < 0 ? 'red.500' : 'green.500'}>
                                         {entry.quantity || 'N/A'}
                                     </Td>

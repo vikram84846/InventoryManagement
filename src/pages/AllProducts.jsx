@@ -64,7 +64,7 @@ function AllProducts() {
                     p={4}
                     bg="gray.100"
                 >
-                     <Center w="full" mb={4}>
+                    <Center w="full" mb={4}>
                         <Box w={{ base: "90%", md: "60%" }}>
                             <SearchBar />
                         </Box>
@@ -137,7 +137,11 @@ function AllProducts() {
                                             <Text>{product.quantity || '0'} units</Text>
                                             <HStack spacing={1}>
                                                 <Icon as={MdCategory} />
-                                                <Text>{product.category ? product.category.name : 'Unknown'}</Text>
+                                                <Text>
+                                                    <Link to={`/category/${product.category?.$id}`}>
+                                                        <b>{product.category ? product.category.name : 'Unknown'}</b>
+                                                    </Link>
+                                                </Text>
                                             </HStack>
                                         </VStack>
                                     </Link>
@@ -206,7 +210,11 @@ function AllProducts() {
                                                 <Td>
                                                     <HStack spacing={1}>
                                                         <Icon as={MdCategory} />
-                                                        <Text>{product.category ? product.category.name : 'Unknown'}</Text>
+                                                        <Text>
+                                                            <Link to={`/category/${product.category?.$id}`}>
+                                                                {product.category ? product.category.name : 'Unknown'}
+                                                            </Link>
+                                                        </Text>
                                                     </HStack>
                                                 </Td>
                                                 <Td>

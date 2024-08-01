@@ -186,11 +186,13 @@ const auth = {
     },
     loginWithGoogle: async () => {
         try {
+            // 'https://store-red-eight.vercel.app/profile',
+            // 'https://store-red-eight.vercel.app/signup',
             const response = account.createOAuth2Session(
                 'google',
-                'https://store-red-eight.vercel.app/profile',
-                'https://store-red-eight.vercel.app/signup',
-                
+                'http://localhost:5173/profile',
+                'http://localhost:5173/signup'
+
             );
             console.log('User logged in with Google:', response);
         } catch (error) {

@@ -48,7 +48,6 @@ function CategoryDetail() {
                 setCategoryProducts(foundCategory.products);
             }
         }
-        console.log(categories);
     }, [categoryId, categories]);
 
     if (!category) {

@@ -15,6 +15,7 @@ function ShowRooms() {
     const handleRoomSelect = (room) => {
         setSelectedRoom(room);
         setSelectedRoomId(room);
+        console.log(room);
         fetchProducts();
     };
 

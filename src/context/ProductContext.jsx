@@ -16,23 +16,34 @@ export const ProductProvider = ({ children }) => {
   const session = getSession(); // Get session from cookies or similar
   const userId = session?.$id || user?.$id; // Get user ID from context or session
 
+
+
   const fetchProducts = async () => {
     try {
       if (!userId) {
         throw new Error("User ID not found");
       }
 
+      const locationId = selectedRoomId?.$id; 
+
+      if (!locationId) {
+        console.warn("Location ID is not available");
+        return;
+      }
+
       const data = await db.products.list([
-        Query.equal('userId', userId), // Assuming 'userId' is the field name in your collection
-        Query.orderDesc('$createdAt')
+        Query.orderAsc('$createdAt'),
+        Query.equal('userId', userId)
       ]);
+
       const filteredProducts = data.documents.filter(product =>
-        product.location.some(loc => loc.$id === selectedRoomId?.$id)
+        product.location.some(loc => loc.$id === locationId)
       );
+
       setProducts(filteredProducts);
       // console.log('Filtered Products:', filteredProducts);
     } catch (error) {
-      // console.error('Error fetching products:', error);
+      console.error('Error fetching products:', error);
     }
   };
 
@@ -45,7 +56,7 @@ export const ProductProvider = ({ children }) => {
       setCategory(data.documents);
       // console.log('Categories:', data.documents);
     } catch (error) {
-      // console.error('Error fetching categories:', error);
+      console.error('Error fetching categories:', error);
     }
   };
 
@@ -58,7 +69,7 @@ export const ProductProvider = ({ children }) => {
       setHistory(data.documents);
       // console.log('History:', data.documents);
     } catch (error) {
-      // console.error('Error fetching history:', error);
+      console.error('Error fetching history:', error);
     }
   };
 
@@ -71,7 +82,7 @@ export const ProductProvider = ({ children }) => {
       setWarehouse(data.documents); // Assuming `data.documents` contains the array of locations
       // console.log('Location:', data.documents);
     } catch (error) {
-      // console.error('Error fetching location:', error);
+      console.error('Error fetching location:', error);
     }
   };
 

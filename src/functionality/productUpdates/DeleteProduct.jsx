@@ -16,6 +16,7 @@ import {
 import { MdDelete } from 'react-icons/md';
 import { ProductContext } from '../../context/ProductContext';
 import { db } from '../../appwrite/appwriteService';
+import { useNavigate } from 'react-router-dom';
 
 
 function DeleteProduct({ product }) {
@@ -23,13 +24,17 @@ function DeleteProduct({ product }) {
     const { fetchProducts } = useContext(ProductContext)
     const toast = useToast();
 
+    const navigate = useNavigate()
+
     const handleDelete = async () => {
         try {
             const response = await db.products.delete(product?.$id);
-            console.log('this is response', product?.$id);
-            console.log(response)
+            // console.log('this is response', product?.$id);
+            // console.log(response)
             // console.log('this is response', p);
             fetchProducts()
+            navigate('/')
+
             toast({
                 title: 'Product Deleted',
                 description: 'Product has been deleted successfully.',

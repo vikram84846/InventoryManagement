@@ -132,6 +132,7 @@ function Sidebar() {
                             <UpdateStock />
                             <AddProduct />
                             <AddCategory />
+                           
                             <Link to="/products">
                                 <Button
                                     p={5}
